@@ -37,6 +37,38 @@
             .replace(/'/g, "&#39;");
     }
 
+    function getItemMinLevel(item) {
+        if (!item) return '-';
+        if (item.min_poziom !== undefined && item.min_poziom !== null) return item.min_poziom;
+        if (item.min_level !== undefined && item.min_level !== null) return item.min_level;
+        if (item.poziom !== undefined && item.poziom !== null) return item.poziom;
+        if (item.lvl !== undefined && item.lvl !== null) return item.lvl;
+        return '-';
+    }
+
+    function getItemWeight(item) {
+        if (!item) return '-';
+        if (item.rate !== undefined && item.rate !== null) return item.rate;
+        if (item.waga !== undefined && item.waga !== null) return item.waga;
+        if (item.weight !== undefined && item.weight !== null) return item.weight;
+        return '-';
+    }
+
+    function getItemAtk(item) {
+        if (!item) return '-';
+        return item.atk !== undefined && item.atk !== null ? item.atk : (item.attack !== undefined ? item.attack : '-');
+    }
+
+    function getItemDef(item) {
+        if (!item) return '-';
+        return item.def !== undefined && item.def !== null ? item.def : (item.defence !== undefined ? item.defence : '-');
+    }
+
+    function getItemLifeSteal(item) {
+        if (!item) return '-';
+        return item.lifesteal !== undefined && item.lifesteal !== null ? item.lifesteal : (item.ls !== undefined ? item.ls : '-');
+    }
+
     function toast(message, kind /* 'info' | 'error' | 'success' */) {
         if (!toastContainer) return;
         const el = document.createElement("div");
@@ -242,20 +274,19 @@
         row.appendChild(createCell(guessed.rodzaj || "-", guessed.rodzaj === state.target.rodzaj ? "correct" : "wrong"));
         
         // 4. Min. Poziom
-        const gRate = guessed.rate !== undefined ? guessed.rate : guessed.min_poziom;
-        const tRate = state.target.rate !== undefined ? state.target.rate : state.target.min_poziom;
-        row.appendChild(createNumberCell(gRate, tRate));
+        row.appendChild(createNumberCell(getItemMinLevel(guessed), getItemMinLevel(state.target)));
 
         // 5. Atak (ATK)
-        row.appendChild(createNumberCell(guessed.atk, state.target.atk));
+        row.appendChild(createNumberCell(getItemAtk(guessed), getItemAtk(state.target)));
         // 6. Obrona (DEF)
-        row.appendChild(createNumberCell(guessed.def, state.target.def));
+        row.appendChild(createNumberCell(getItemDef(guessed), getItemDef(state.target)));
+
         // 7. Waga
-        row.appendChild(createNumberCell(guessed.waga, state.target.waga));
+        row.appendChild(createNumberCell(getItemWeight(guessed), getItemWeight(state.target)));
 
         // 8. Lifesteal
-        const guessedLS = guessed.lifesteal;
-        const targetLS = state.target.lifesteal;
+        const guessedLS = getItemLifeSteal(guessed);
+        const targetLS = getItemLifeSteal(state.target);
         const lsMatch = String(guessedLS ?? "").trim().toLowerCase() === String(targetLS ?? "").trim().toLowerCase();
         row.appendChild(createCell(guessedLS ?? "-", lsMatch ? "correct" : "wrong"));
 
@@ -309,6 +340,63 @@
         return td;
     }
 
+    function normalizeElementValue(value) {
+        if (value === undefined || value === null || value === "") return "";
+        return String(value).trim().toLowerCase();
+    }
+
+    function mapElementToBadge(value) {
+        const normalized = normalizeElementValue(value);
+        if (!normalized) return { css: "default", label: "-" };
+
+        const map = {
+            fire: { css: "fire", label: "Ogień" },
+            ogień: { css: "fire", label: "Ogień" },
+            ogien: { css: "fire", label: "Ogień" },
+            water: { css: "water", label: "Woda" },
+            woda: { css: "water", label: "Woda" },
+            earth: { css: "earth", label: "Ziemia" },
+            ziemia: { css: "earth", label: "Ziemia" },
+            wind: { css: "wind", label: "Wiatr" },
+            wiatr: { css: "wind", label: "Wiatr" },
+            light: { css: "light", label: "Światło" },
+            światło: { css: "light", label: "Światło" },
+            swiatlo: { css: "light", label: "Światło" },
+            dark: { css: "dark", label: "Mrok" },
+            mrok: { css: "dark", label: "Mrok" },
+            shadow: { css: "shadow", label: "Cień" },
+            cień: { css: "shadow", label: "Cień" },
+            cien: { css: "shadow", label: "Cień" },
+            ice: { css: "ice", label: "Lód" },
+            lód: { css: "ice", label: "Lód" },
+            lod: { css: "ice", label: "Lód" },
+            nature: { css: "nature", label: "Natura" },
+            natura: { css: "nature", label: "Natura" },
+            magic: { css: "magic", label: "Magia" },
+            magia: { css: "magic", label: "Magia" },
+            poison: { css: "poison", label: "Trucizna" },
+            trucizna: { css: "poison", label: "Trucizna" },
+            physical: { css: "physical", label: "Fizyczne" },
+            fizyczne: { css: "physical", label: "Fizyczne" },
+            energy: { css: "energy", label: "Energia" },
+            energia: { css: "energy", label: "Energia" },
+            lightning: { css: "lightning", label: "Błyskawica" },
+            błyskawica: { css: "lightning", label: "Błyskawica" },
+            blyskawica: { css: "lightning", label: "Błyskawica" }
+        };
+
+        const known = map[normalized];
+        if (known) return known;
+
+        const fallback = normalized
+            .replace(/ą/g, 'a').replace(/ć/g, 'c').replace(/ę/g, 'e')
+            .replace(/ł/g, 'l').replace(/ń/g, 'n').replace(/ó/g, 'o')
+            .replace(/ś/g, 's').replace(/ź/g, 'z').replace(/ż/g, 'z')
+            .replace(/\s+/g, '-');
+
+        return { css: fallback || 'default', label: value };
+    }
+
     function createArrayMatchCell(guessedVal, targetVal) {
         const td = document.createElement("td");
         td.className = "cell";
@@ -316,13 +404,24 @@
         const gArr = Array.isArray(guessedVal) ? guessedVal : (guessedVal ? [guessedVal] : []);
         const tArr = Array.isArray(targetVal) ? targetVal : (targetVal ? [targetVal] : []);
 
-        const cleanG = gArr.map(item => String(item).trim().toLowerCase());
-        const cleanT = tArr.map(item => String(item).trim().toLowerCase());
+        const cleanG = gArr.map(item => normalizeElementValue(item));
+        const cleanT = tArr.map(item => normalizeElementValue(item));
+        const hasMatch = cleanG.some(item => item && cleanT.includes(item));
 
-        const hasMatch = cleanG.some(item => cleanT.includes(item));
+        if (gArr.length === 0 && tArr.length === 0) {
+            td.textContent = "-";
+            td.classList.add("cell-wrong");
+            return td;
+        }
 
-        const displayStr = gArr.length > 0 ? gArr.join(", ") : "-";
-        td.textContent = displayStr;
+        const html = gArr.map(item => {
+            const normalized = normalizeElementValue(item);
+            if (!normalized) return "<span class=\"badge type-default\">-</span>";
+            const badge = mapElementToBadge(item);
+            return `<span class="badge type-${badge.css}">${escapeHtml(badge.label)}</span>`;
+        }).join(" ");
+
+        td.innerHTML = html || "-";
         td.classList.add(hasMatch ? "cell-correct" : "cell-wrong");
 
         return td;
