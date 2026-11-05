@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Księga Przedmiotów – Polandle</title>
+    <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Księga Przedmiotów</h1>
+        
+        <div class="nav-menu">
+            <a href="index.html" class="nav-link">← Powrót do menu</a>
+                <span class="nav-separator">|</span>
+        <a href="przedmiotle.html" class="nav-link">Przejdź do zgadywania →</a>
+        </div>
+
+        <!-- PASEK WYSZUKIWANIA I FILTRÓW -->
+        <div class="search-container glass-panel">
+            <div class="search-row">
+                <input type="text" id="search-input" placeholder="Wyszukaj przedmiot po nazwie, typie, rodzaju lub żywiołach..." autocomplete="off">
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="filter-typ">Typ:</label>
+                    <select id="filter-typ" class="filter-select">
+                        <option value="">Wszystkie</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-rodzaj">Rodzaj:</label>
+                    <select id="filter-rodzaj" class="filter-select">
+                        <option value="">Wszystkie</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-by">Sortuj po:</label>
+                    <select id="sort-by" class="filter-select">
+                        <option value="nazwa-asc">Nazwa (A-Z)</option>
+                        <option value="nazwa-desc">Nazwa (Z-A)</option>
+                        <option value="typ-asc">Typ (A-Z)</option>
+                        <option value="min_poziom-desc">Min. Poziom (Najwyższy)</option>
+                        <option value="waga-desc">Waga (Największa)</option>
+                        <option value="atk-desc">Atk (Największy)</option>
+                        <option value="def-desc">Def (Największa)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="monster-count-bar">
+                Znaleziono przedmiotów: <strong id="item-count">0</strong>
+            </div>
+        </div>
+
+        <!-- TABELA PRZEDMIOTÓW -->
+        <div class="table-wrapper">
+            <table class="game-table bestiary-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="nazwa">Nazwa ↕</th>
+                        <th class="sortable" data-sort="typ">Typ ↕</th>
+                        <th class="sortable" data-sort="rodzaj">Rodzaj ↕</th>
+                        <th class="sortable" data-sort="min_poziom">Min. Poziom ↕</th>
+                        <th class="sortable" data-sort="waga">Waga ↕</th>
+                        <th class="sortable" data-sort="atk">Atk ↕</th>
+                        <th class="sortable" data-sort="def">Def ↕</th>
+                        <th class="sortable" data-sort="lifesteal">Lifesteal ↕</th>
+                        <th>Wzmacnia</th>
+                        <th>Osłabia</th>
+                    </tr>
+                </thead>
+                <tbody id="items-table-body">
+                    <!-- Dynamicznie generowane wiersze -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/przedmioty.js"></script>
+    <script src="js/app_przedmioty.js"></script>
+</body>
+</html>

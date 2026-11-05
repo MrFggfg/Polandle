@@ -1,0 +1,1059 @@
+:root {
+    --bg-color: #1a1a1a;
+    --card-bg: #242424;
+    --text-color: #e0e0e0;
+    --accent-color: #ff4655;
+    --border-color: #333;
+}
+/* Styl dla całej strony, tabeli i wyszukiwarki */
+body, input, table {
+    font-family: 'Amaranth', 'Carlito', sans-serif;
+}
+
+/* Styl tylko dla głównych, klimatycznych tytułów */
+h1, h2, .win-message h2 {
+    font-family: 'Black Chancery', serif;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+body {
+    background-image: url('tlo2.png'); /* Tutaj wpisz nazwę swojego pliku z obrazkiem */
+    background-size: cover;      /* Obrazek pokryje cały ekran */
+    background-position: center;  /* Wyśrodkowanie grafiki */
+    background-repeat: no-repeat; /* Obrazek nie będzie się powielał w kafelki */
+    background-attachment: fixed; /* Efekt "paralaksy" - tabela jedzie, tło stoi */
+
+    /* Aby ciemny tekst nie zlał się z obrazkiem, warto dodać ciemny filtr na całe tło: */
+    background-blend-mode: multiply;
+    background-color: rgba(0, 0, 0, 0.6); /* Przyciemnienie obrazka o 60% */
+
+    /* Reszta Twoich stylów */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,1);
+}
+
+.container {
+    max-width: 1350px !important; /* Daje tabeli dużo miejsca na ekranie */
+    width: 95%;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+/* Wyszukiwarka */
+.search-container {
+    margin-bottom: 20px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Tabela */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: #1f1f1f;
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+tr {
+    animation: fadeIn 0.4s ease-out;
+    transition: background-color 0.2s;
+}
+
+
+.monster-name {
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Odznaki i statusy */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.lvl-badge { background-color: #444; color: #fff; }
+.type-mrok { background-color: #4a154b; color: #ff79c6; }
+.type-światło { background-color: #e6c60d; color: #000; }
+.type-ogień { background-color: #ff5555; color: #fff; }
+.type-lód { background-color: #8be9fd; color: #000; }
+.type-ziemia { background-color: #ffb86c; color: #000; } 
+.type-woda { background-color: #86bdff; color: #000; }   
+.type-fizyczny { background-color: #bd93f9; color: #fff; }
+.type-brak { background-color: #555; color: #ccc; }
+
+.type-fire { background-color: #e74c3c; }      /* Ogień - Czerwony */
+.type-water { background-color: #86bdff; }     /* Woda - Niebieski */
+.type-earth { background-color: #ffb86c; }     /* Ziemia - Zielony */
+.type-light { background-color: #e6c60d; color: #222; text-shadow: none; } /* Światło - Żółty */
+.type-dark { background-color: #4a154b; }      /* Mrok - Fioletowy */
+.type-ice { background-color: #8be9fd; }       /* Lód - Lodowy błękit */
+
+.rare-status {
+    font-weight: bold;
+}
+.rare-yes { color: #50fa7b; } /* Zielony jeśli dropi coś rzadkiego */
+.rare-no { color: #ff5555; }  /* Czerwony jeśli nie */
+
+.no-results {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 30px;
+}
+
+/* Dodatki do gry */
+.game-instructions {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.nav-menu {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.game-container {
+    max-width: 400px;
+    margin: 0 auto 30px auto; /* Centruje cały kontener gry na środku strony */
+    position: relative;
+}
+
+.input-row {
+    display: flex;
+    justify-content: center; /* Wyśrodkowuje zawartość wewnątrz wiersza */
+    width: 100%;
+}
+
+#guess-input {
+    width: 100%;
+    padding: 14px 20px;
+    /* POPRAWKA: Efekt szkła (półprzezroczystość + rozmycie tła) */
+    background: rgba(36, 36, 36, 0.2) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Delikatna, jasna krawędź szkła */
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+.input-wrapper {
+    position: relative; /* To jest klucz! Podpowiedzi będą się pozycjonować względem tego elementu */
+    flex: 1;            /* Zastępuje flex: 1, który wcześniej był na #guess-input */
+    display: flex;
+    flex-direction: column;
+}
+#guess-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(255, 70, 85, 0.4);
+}
+
+/* Okno podpowiedzi też dostaje efekt szkła */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(36, 36, 36, 0.2) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-top: none;
+    z-index: 10;
+    max-height: 250px;
+    overflow-y: auto;
+    border-radius: 0 0 6px 6px;
+}
+
+/* Główny kontener tabeli również wtapia się w tło */
+.table-wrapper {
+    background: rgba(36, 36, 36, 0.4) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.suggestions-box div {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.suggestions-box div:hover {
+    background-color: #333;
+}
+
+/* --- POPRAWIONY SYSTEM KAFELKÓW (BEZ OBRAMOWANIA) --- */
+
+/* Całkowite usunięcie domyślnych linii tabeli dla gry */
+/* POPRAWKA: Rozbicie tabeli na osobne, niezależne wiersze */
+.game-table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important; /* 8px odstępu pionowego między próbami */
+    width: 100%;
+}
+
+.game-table th {
+    background-color: rgba(31, 31, 31, 0.6);
+    backdrop-filter: blur(5px);
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 18px;
+}
+
+/* Bazowa klasa dla każdej komórki w tabeli gry */
+.game-table td.cell {
+    padding: 14px 18px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    border: none !important;
+    
+    /* Przygotowanie pod animację obrotu 3D */
+    backface-visibility: hidden;
+    transform: rotateX(90deg);
+    animation: flipIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* POPRAWKA: Zaokrąglanie rogów dla całego paska próby (lewa i prawa krawędź) */
+.game-table tr td:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.game-table tr td:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* Stan: TRAFIONY (Zielony) */
+.cell-correct {
+    background-color: #155724 !important;
+    color: #d4edda !important;
+}
+
+/* Stan: BLISKO (Żółty) */
+.cell-close {
+    background-color: #856404 !important;
+    color: #fff3cd !important;
+}
+
+/* Stan: PUDŁO (Czerwony) */
+.cell-wrong {
+    background-color: #721c24 !important;
+    color: #f8d7da !important;
+}
+
+/* KLUCZOWE KLATKI ANIMACJI (Obrót wokół własnej osi) */
+@keyframes flipIn {
+    0% {
+        transform: rotateX(90deg);
+        background-color: var(--card-bg);
+    }
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
+/* Styl dla okienka gratulacji */
+/* Styl dla okienka wygranej - teraz będzie identyczne jak pole wpisywania */
+.win-message {
+    /* Ustawiamy tło z przezroczystością (0.7 oznacza 70% krycia) */
+    background: rgba(30, 30, 30, 0.2); 
+    
+    /* Dodajemy rozmycie tła pod okienkiem (efekt matowego szkła) */
+    backdrop-filter: blur(2px); 
+    
+    /* Reszta stylu dopasowana do Twojego inputa */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Delikatna ramka */
+    border-radius: 6px;
+    padding: 20px;
+    color: #ffffff;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    margin: 20px auto;
+    width: fit-content;
+    
+    /* Animacja */
+    animation: fadeIn 0.5s ease;
+}
+
+/* Opcjonalnie: animacja pojawiania się, żeby nie było "szoku" */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dopasowanie przycisku "Graj ponownie", żeby pasował do stylu */
+.win-message button {
+    background: transparent;
+    border: 1px solid #8c734b; /* Złoty kolor jak obramowanie */
+    color: #8c734b;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+
+.win-message button:hover {
+    background: #8c734b;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Podświetlenie elementu wybranego strzałkami na klawiaturze */
+.suggestions-box div.suggestion-active {
+    background-color: var(--accent-color) !important;
+    color: #fff !important;
+}
+
+.monster-sprite {
+    display: block;
+    margin: 0 auto; /* Wyśrodkowanie ikony w komórce */
+    background-repeat: no-repeat;
+    
+    /* TO JEST KLUCZOWE DLA WYRAZISTOŚCI PIXEL-ARTU: */
+    image-rendering: pixelated; 
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Opcjonalnie: jeśli chcesz, żeby komórka tabeli też była większa */
+.game-table td {
+    padding: 10px; /* Dodaje trochę oddechu wokół ikony */
+}
+
+.animated-weapon {
+    width: 32px;
+    height: 32px;
+    background-image: url('images/golden_blade.png'); /* To musi być ten sam plik co w head */
+    image-rendering: pixelated; /* Bardzo ważne dla ostrości pixel-artu */
+    
+    /* Animacja */
+    animation: weapon-glow 0.8s steps(5) infinite;
+    
+    /* Opcjonalnie: ustawienie w linii z tekstem */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes weapon-glow {
+    0% { background-position: 0 0; }
+    100% { background-position: -160px 0; }
+}
+.header-container {
+    display: flex;
+    justify-content: center; /* Wyśrodkowanie */
+    align-items: center;     /* Wyrównanie broni do tekstu */
+    gap: 15px;               /* Odstęp między bronią a tekstem */
+    margin: 20px 0;
+}
+/* Celujemy w pierwszą komórkę (td) każdego wiersza w ciele tabeli (tbody) */
+tbody td:first-child {
+    /* Wymuszamy neutralne tło (dopasuj rgba do swojego bazowego koloru) */
+    background-color: rgba(30, 30, 30, 0.1) !important; 
+    
+    /* Zabezpieczenie przed ramką, jeśli też zmieniała kolor */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+}
+/* --- SYSTEM PODPOWIEDZI I PRZYCISKÓW --- */
+.game-container {
+    max-width: 560px !important; /* Poszerzamy kontener, aby guziki ładnie zmieściły się obok inputa */
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Odstęp między inputem a guzikami */
+    width: 100%;
+}
+
+#guess-input {
+    flex: 1; /* Input zajmuje całą pozostałą przestrzeń */
+}
+
+.hint-buttons {
+    display: flex;
+    gap: 8px; /* Odstęp między samymi obrazkami png */
+    align-items: center;
+}
+
+.hint-buttons img {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    image-rendering: pixelated; /* Zachowujemy styl pixel-artu z Stendhala! */
+}
+
+/* Efekt najechania na ODblokowany przycisk */
+.hint-buttons img:not(.locked):hover {
+    transform: scale(1.1);
+}
+
+/* Klasa blokująca przyciski */
+.hint-buttons img.locked {
+    opacity: 0.25; /* Mocne wyszarzenie */
+    filter: grayscale(100%); /* Zamiana na czarno-biały */
+    pointer-events: none; /* Całkowite zablokowanie kliknięć i dymków tooltip */
+}
+
+/* Styl dla okienka wyświetlającego podpowiedź (efekt szkła jak u Ciebie) */
+.hint-message-box {
+    background: rgba(36, 36, 36, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 15px;
+    color: #fff;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.4s ease;
+}
+
+/* --- SZKLANY PRZYCISK KSIĘGI WIEDZY --- */
+.glass-btn {
+    background: rgba(36, 36, 36, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 22px;
+    width: 48px;
+    height: 48px; /* Dopasowane rozmiarem do guess-input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.glass-btn:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(255, 70, 85, 0.4);
+    background: rgba(36, 36, 36, 0.4);
+}
+
+/* --- TŁO OKNA MODAL --- */
+/* --- TŁO ZA OKIENKIEM (Lżejsze przyciemnienie) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45); /* Poprzednio: 0.75 (teraz tło jest bardziej widoczne) */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Wyświetlanie modala, gdy posiada klasę active */
+.modal-overlay.active {
+    display: flex !important;
+}
+
+/* --- PRZEŚWITUJĄCE SZKLANE OKNO --- */
+.modal-glass-box {
+    background: rgba(18, 18, 18, 0.45); /* Poprzednio: 0.85 (przezroczystość mocno podbita) */
+    backdrop-filter: blur(8px);          /* Zmniejszone z 15px, by wyraźniej widzieć tło */
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tytuł pasujący do "Gratulacje!" */
+.modal-glass-box h2 {
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Przycisk zamknięcia (X) */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 32px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    line-height: 1;
+    font-family: Arial, sans-serif;
+}
+
+.close-btn:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+/* Wewnętrzny przewijany kontener */
+.modal-content-scroll {
+    overflow-y: auto;
+    padding-right: 10px; /* Miejsce na customowy scrollbar */
+}
+
+/* Mroczny scrollbar dla wnętrza okienka */
+.modal-content-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-content-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+.modal-content-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.modal-content-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* --- TYPOGRAFIA I UKŁAD WEWNĄTRZ --- */
+.stats-group {
+    margin-bottom: 25px;
+}
+
+.stats-label {
+    color: #aaa;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Kafelki z klasami (stylizowane na komórki z Twojej tabeli) */
+.stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.stat-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stat-number {
+    color: var(--accent-color); /* Czerwony kolor liczebności */
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+/* --- GRAFIKA PRZYCISKU STATYSTYK (PO LEWEJ) --- */
+.btn-stats-img {
+    width: 36px;  /* Identyczny rozmiar jak przyciski podpowiedzi */
+    height: 36px; 
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.3s ease; /* Identyczny czas animacji */
+    image-rendering: pixelated; /* Utrzymuje ostrość pixel-artu */
+    flex-shrink: 0;
+}
+
+.btn-stats-img:hover {
+    transform: scale(1.1); /* Dokładnie takie samo powiększenie po najechaniu myszką */
+}
+
+/* --- STYLE DLA BESTIARIUSZA I FILTRÓW --- */
+.search-container.glass-panel {
+    background: rgba(30, 30, 30, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.search-row input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-row input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 70, 85, 0.3);
+}
+
+.filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+}
+
+.filter-select {
+    background: rgba(18, 18, 18, 0.8);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: var(--accent-color);
+}
+
+.monster-count-bar {
+    font-size: 14px;
+    color: #ccc;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+.monster-count-bar strong {
+    color: var(--accent-color);
+}
+
+/* Klikalne nagłówki do sortowania w tabeli */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+th.sortable:hover {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* --- IKONKI 16x16 I RÓWNA TABELA --- */
+
+/* Zmniejszenie ikonek potworów do 16x16px */
+.bestiary-table {
+    width: 100%;
+    min-width: 1150px; /* Minimalna szerokość, zapobiega zgniataniu kolumn */
+    border-collapse: collapse;
+}
+
+.bestiary-table th, 
+.bestiary-table td {
+    padding: 10px 14px; /* Zwiększony odstęp wewnątrz komórek */
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Ikona 16x16 px - stały, sztywny rozmiar */
+.monster-icon-small {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Wyrównanie nazwy potwora do lewej dla lepszej czytelności */
+.bestiary-table th:nth-child(2),
+.bestiary-table td:nth-child(2) {
+    width: 130px;        /* Sztywna, wąska szerokość */
+    max-width: 150px;    /* Blokuje rozciąganie */
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Jeśli nazwa byłaby ekstremalnie długa, doda "..." */
+}
+/* =========================================================================
+ * DOKLEJONE POPRAWKI (a11y, mobile, toasty, focus)
+ * Wszystko poniżej dodane w ramach porządków — nie usuwaj bez potrzeby.
+ * =======================================================================*/
+
+/* Ukrycie wizualne, ale widoczne dla czytników ekranu */
+.sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+}
+
+/* Link "Przejdź do treści" */
+.skip-link {
+    position: absolute;
+    top: -40px; left: 8px;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    z-index: 100;
+    transition: top .2s;
+}
+.skip-link:focus { top: 8px; }
+
+/* Widoczny focus dla klawiatury na wszystkich interaktywnych elementach */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[role="option"]:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Ikony-przyciski (zastępują <img>-jako-button) */
+.icon-button {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    transition: transform .15s, border-color .15s, opacity .15s;
+}
+.icon-button img {
+    max-width: 40px;
+    max-height: 40px;
+    display: block;
+    pointer-events: none;
+}
+.icon-button:hover:not(:disabled) { transform: scale(1.05); }
+.icon-button:disabled,
+.icon-button.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Toasty (zastępują alert()) */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+    pointer-events: none;
+}
+.toast {
+    background: rgba(36, 36, 36, 0.95);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    font-size: 14px;
+    max-width: min(90vw, 400px);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: toastIn .25s ease-out forwards;
+}
+.toast-error   { border-left: 3px solid #ff4655; }
+.toast-info    { border-left: 3px solid #86bdff; }
+.toast-success { border-left: 3px solid #50fa7b; }
+.toast-out     { animation: toastOut .3s ease-in forwards; }
+
+@keyframes toastIn  { to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(20px); } }
+
+/* Style pomocnicze używane z JS zamiast inline style */
+.hint-value  { color: #e0d8b0; font-weight: bold; }
+.hint-italic { font-style: italic; }
+.giveup-title {
+    color: #ff4655;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+.giveup-btn {
+    background: transparent;
+    border: 1px solid #ff4655;
+    color: #ff4655;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: background .2s, color .2s;
+}
+.giveup-btn:hover { background: #ff4655; color: #fff; }
+.stats-empty { color: #888; font-style: italic; }
+.win-stats { font-size: 14px; color: #ccc; margin-top: 8px; }
+
+/* Uszanuj preferencję ograniczonej animacji */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Responsywność — tabela na małych ekranach */
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    h1 { font-size: 1.6rem; letter-spacing: 1px; }
+    .game-instructions { font-size: 14px; }
+
+    .input-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .input-wrapper { min-width: 100%; order: -1; }
+
+    .table-wrapper {
+        /* pozostawiamy scroll poziomy — 11 kolumn nie zmieści się inaczej */
+        -webkit-overflow-scrolling: touch;
+    }
+    .game-table th,
+    .game-table td.cell {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    /* Tło fixed źle działa na iOS — wyłączamy */
+    body {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon-button img { max-width: 32px; max-height: 32px; }
+    .icon-button { min-width: 40px; min-height: 40px; }
+}
+/* =========================================================================
+ * STRONA GŁÓWNA - MENU WYBORU GRY (index.html)
+ * =======================================================================*/
+
+.main-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh; /* Centrowanie w pionie na ekranie */
+}
+
+.menu-header h1 {
+    font-size: 4rem; /* Większy, masywny tytuł na wejściu */
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+}
+
+.menu-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 30px;
+}
+
+/* Duży szklany przycisk wyboru gry */
+.glass-btn-large {
+    background: rgba(36, 36, 36, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #555151;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Animacja podświetlenia przycisku (tylko aktywnego) */
+.glass-btn-large:hover:not(.disabled) {
+    transform: translateY(-5px); /* Lekkie uniesienie */
+    background: rgba(36, 36, 36, 0.65);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(255, 70, 85, 0.4); /* Krwista poświata */
+}
+
+/* Zablokowany przycisk "Wkrótce" */
+.glass-btn-large.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(80%); /* Wygaszenie kolorów */
+    background: rgba(20, 20, 20, 0.4);
+}
+
+/* Typografia wewnątrz przycisku */
+.glass-btn-large .btn-title {
+    font-family: 'Black Chancery', serif; /* Twoja klimatyczna czcionka */
+    font-size: 28px;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.glass-btn-large .btn-desc {
+    font-size: 15px;
+    color: #aaa;
+    font-family: 'Amaranth', 'Carlito', sans-serif;
+}
+
+/* =========================================================================
+ * NAWIGACJA W NAGŁÓWKU
+ * =======================================================================*/
+
+.nav-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.nav-separator {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+/* Nagłówek i komórki 9. kolumny (Wzmacnia) */
+th:nth-child(9),
+td.col-wzmacnia {
+    max-width: 110px;       /* Dostosuj wartość (np. 90px - 130px) */
+    width: 110px;
+    white-space: normal;    /* Zapewnia zawijanie odznak do nowego wiersza */
+    word-break: break-word;
+}
+
+/* Opcjonalnie: zmniejszenie marginesów badge'y wewnątrz tej kolumny, by zajmowały mniej miejsca */
+td.col-wzmacnia .badge {
+    margin: 1px 2px;
+    padding: 2px 6px;
+    font-size: 0.8em;
+}

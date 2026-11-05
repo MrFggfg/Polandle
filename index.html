@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Polandle – Wybierz tryb gry</title>
+    <meta name="description" content="Wybierz tryb gry: zgadnij potwora lub przedmiot.">
+    <link rel="icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container main-menu-container">
+        <header class="menu-header">
+            <h1>Polandle</h1>
+            <p class="game-instructions">
+                Witaj wędrowcze! Wybierz tryb gry i sprawdź swoją wiedzę.
+            </p>
+        </header>
+
+        <main class="menu-actions">
+            <!-- Przycisk 1: Działająca gra -->
+            <a href="potwordle.html" class="menu-btn glass-btn-large">
+                <span class="btn-title">Zgadnij Potwora</span>
+                <span class="btn-desc">Klasyczny tryb po statystykach</span>
+            </a>
+            
+            <!-- Przycisk 2: Gra o przedmiotach -->
+            <a href="przedmiotle.html" class="menu-btn glass-btn-large">
+                <span class="btn-title">Zgadnij Przedmiot</span>
+                <span class="btn-desc">Zgadnij przedmiot po statystykach</span>
+            </a>
+
+            <!-- Przycisk 3: Geoguessr (Zablokowany / Wkrótce) -->
+            <div class="menu-btn glass-btn-large" style="opacity: 0.5; cursor: not-allowed;" aria-disabled="true">
+                <span class="btn-title">Geoguessr (Wkrótce)</span>
+                <span class="btn-desc">Zgaduj lokacje na podstawie unikalnych miejsc</span>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestiariusz - Polandle</title>
+    <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bestiariusz</h1>
+        
+        <div class="nav-menu">
+            <a href="index.html" class="nav-link">← Powrót do menu</a>
+                <span class="nav-separator">|</span>
+    <a href="potwordle.html" class="nav-link">Przejdź do zgadywania →</a>
+        </div>
+
+        <!-- PASEK WYSZUKIWANIA I FILTRÓW -->
+        <div class="search-container glass-panel">
+            <div class="search-row">
+                <input type="text" id="search-input" placeholder="Wyszukaj potwora po nazwie, typie lub dropie..." autocomplete="off">
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="filter-class">Klasa:</label>
+                    <select id="filter-class" class="filter-select">
+                        <option value="">Wszystkie</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-attack">Typ Ataku:</label>
+                    <select id="filter-attack" class="filter-select">
+                        <option value="">Wszystkie</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-defense">Typ Obrony:</label>
+                    <select id="filter-defense" class="filter-select">
+                        <option value="">Wszystkie</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-by">Sortuj po:</label>
+                    <select id="sort-by" class="filter-select">
+                        <option value="level-asc">Poziom (Rosnąco)</option>
+                        <option value="level-desc">Poziom (Malejąco)</option>
+                        <option value="name-asc">Nazwa (A-Z)</option>
+                        <option value="name-desc">Nazwa (Z-A)</option>
+                        <option value="hp-desc">HP (Najwięcej)</option>
+                        <option value="exp-desc">EXP (Najwięcej)</option>
+                        <option value="respawn-asc">Respawn (Najszybciej)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="monster-count-bar">
+                Znaleziono potworów: <strong id="monster-count">0</strong>
+            </div>
+        </div>
+
+        <!-- TABELA BESTIARIUSZA -->
+        <div class="table-wrapper">
+            <table class="game-table bestiary-table">
+                <thead>
+                    <tr>
+                        <th>Ikona</th>
+                        <th class="sortable" data-sort="name">Nazwa ↕</th>
+                        <th class="sortable" data-sort="class">Klasa ↕</th>
+                        <th class="sortable" data-sort="level">Poziom ↕</th>
+                        <th class="sortable" data-sort="attack">Atak ↕</th>
+                        <th class="sortable" data-sort="defense">Obrona ↕</th>
+                        <th class="sortable" data-sort="hp">HP ↕</th>
+                        <th class="sortable" data-sort="exp">EXP ↕</th>
+                        <th class="sortable" data-sort="respawn">Respawn ↕</th>
+                        <th>Rozmiar</th>
+                        <th>Typ Ataku</th>
+                        <th>Typ Obrony</th>
+                        <th>Rzadki Drop</th>
+                    </tr>
+                </thead>
+                <tbody id="monsters-table-body">
+                    <!-- Dynamicznie generowane wiersze -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/baza_potworow.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

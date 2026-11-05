@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+
+    <title>Polandle – Zgadnij Przedmiot</title>
+    <meta name="description" content="Polandle to codzienna zagadka: zgadnij przedmiot po jego statystykach. Zielone kafelki oznaczają trafienie, strzałki podpowiadają czy wartość jest za niska, czy za wysoka.">
+
+    <!-- Open Graph / social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Polandle – Zgadnij Przedmiot">
+    <meta property="og:description" content="Codzienna zagadka: zgadnij przedmiot po statystykach w stylu Wordle.">
+    <meta property="og:image" content="tlo2.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Polandle – Zgadnij Przedmiot">
+    <meta name="twitter:description" content="Codzienna zagadka: zgadnij przedmiot po statystykach.">
+
+    <link rel="icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Przejdź do treści</a>
+
+    <div class="container">
+        <header>
+            <h1>Zgadnij Przedmiot!</h1>
+            <p class="game-instructions">
+                Wpisz nazwę przedmiotu. Zielone pola oznaczają trafienie,
+                strzałki pokazują, czy wartość jest za niska (↑), czy za wysoka (↓).
+            </p>
+
+            <nav class="nav-menu" aria-label="Nawigacja główna">
+                <a href="index.html" class="nav-link">← Menu główne</a>
+                    <span class="nav-separator">|</span>
+
+                <a href="przedmioty_baza.html" class="nav-link">Księga Przedmiotów →</a>
+            </nav>
+        </header>
+
+        <main id="main">
+            <div class="game-container">
+                <div class="input-row">
+                    <button type="button" id="open-stats" class="icon-button" aria-label="Otwórz Księgę Wiedzy (typy, rodzaj, wzmocnienia, osłabienia)">
+                        <img src="images/podpowiedz1.png" alt="" aria-hidden="true">
+                    </button>
+
+                    <div class="input-wrapper">
+                        <img src="search.png" alt="" class="search-icon">
+                        <label for="guess-input" class="sr-only">Nazwa przedmiotu</label>
+                        
+                        <input
+                            type="text"
+                            id="guess-input"
+                            placeholder="Wpisz nazwę przedmiotu..."
+                            autocomplete="off"
+                            autocapitalize="off"
+                            spellcheck="false"
+                            aria-autocomplete="list"
+                            aria-controls="suggestions"
+                            aria-expanded="false"
+                            aria-activedescendant=""
+                        >
+                        <div id="suggestions" class="suggestions-box" role="listbox" aria-label="Podpowiedzi nazw przedmiotów"></div>
+                    </div>
+                    <div class="hint-buttons">
+                        <button type="button" id="btn-giveup" class="icon-button" aria-label="Poddaj się">
+                            <img src="images/poddajsie.png" alt="" aria-hidden="true">
+                        </button>
+                    </div>
+</button>
+                </div>
+            </div>
+
+            <div id="hint-message" class="hint-message-box hidden" role="status" aria-live="polite"></div>
+
+            <div id="win-message" class="win-message hidden" role="status" aria-live="polite">
+                <h2>Gratulacje!</h2>
+                <p>Odgadłeś przedmiot: <strong id="correct-item-name">...</strong></p>
+                <p id="win-stats" class="win-stats"></p>
+                <button type="button" id="restart-button">Graj ponownie</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="game-table">
+                    <caption class="sr-only">Twoje próby zgadnięcia przedmiotu</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Typ</th>
+                            <th scope="col">Rodzaj</th>
+                            <th scope="col">Min. Poziom</th>
+                            <th scope="col">Atak (ATK)</th>
+                            <th scope="col">Obrona (DEF)</th>
+                            <th scope="col">Waga</th>
+                            <th scope="col">Lifesteal</th>
+                            <th scope="col">Wzmacnia</th>
+                            <th scope="col">Osłabia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guesses-body"></tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Powiadomienia -->
+        <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+        <!-- Modal: Księga Wiedzy -->
+        <div id="stats-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="stats-title" hidden>
+            <div class="modal-glass-box">
+                <button type="button" id="close-stats" class="close-btn" aria-label="Zamknij Księgę Wiedzy">&times;</button>
+                <h2 id="stats-title">Księga Wiedzy</h2>
+
+                <div class="modal-content-scroll">
+                    <div class="stats-group">
+                        <p class="stats-label">TYPY I RODZAJE (ILOŚĆ W BAZIE)</p>
+                        <div id="stats-types" class="stats-grid"></div>
+                    </div>
+
+                    <div class="stats-group">
+                        <p class="stats-label">WARTOŚCI WZMACNIA</p>
+                        <div id="stats-wzmacnia" class="stats-grid"></div>
+                    </div>
+
+                    <div class="stats-group">
+                        <p class="stats-label">WARTOŚCI OSŁABIA</p>
+                        <div id="stats-oslabia" class="stats-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/przedmioty.js" defer></script>
+    <script src="js/game_przedmioty.js" defer></script>
+</body>
+</html>
