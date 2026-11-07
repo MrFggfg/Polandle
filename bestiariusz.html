@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bestiariusz - Polandle</title>
     <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,6 +23,7 @@
         <!-- PASEK WYSZUKIWANIA I FILTRÓW -->
         <div class="search-container glass-panel">
             <div class="search-row">
+                <label for="search-input" class="sr-only">Wyszukaj potwora</label>
                 <input type="text" id="search-input" placeholder="Wyszukaj potwora po nazwie, typie lub dropie..." autocomplete="off">
             </div>
             
@@ -95,5 +98,6 @@
     <script src="js/baza_potworow.js"></script>
     <script src="js/app.js"></script>
     <script src="js/snow.js"></script>
+    <script src="js/pwa.js"></script>
 </body>
 </html>

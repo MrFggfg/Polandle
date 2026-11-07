@@ -18,6 +18,8 @@
     <meta name="twitter:description" content="Codzienna zagadka: zgadnij potwora po statystykach.">
 
     <link rel="icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -40,6 +42,13 @@
 
         <main id="main">
             <div class="game-container">
+                <div class="mode-control">
+                    <label for="game-mode">Tryb gry</label>
+                    <select id="game-mode">
+                        <option value="daily">Codzienna zagadka</option>
+                        <option value="practice">Tryb treningowy</option>
+                    </select>
+                </div>
                 <div class="input-row">
                     <button type="button" id="btn-stats" class="icon-button" aria-label="Otwórz Księgę Wiedzy (klasy i żywioły)">
                         <img src="images/podpowiedz1.png" alt="" aria-hidden="true">
@@ -83,6 +92,7 @@
                 <p>Odgadłeś potwora: <strong id="correct-monster-name">...</strong></p>
                 <p id="win-stats" class="win-stats"></p>
                 <button type="button" id="restart-button">Graj ponownie</button>
+                <button type="button" id="switch-practice-button" class="hidden">Przejdź do trybu treningowego</button>
             </div>
 
             <div class="table-wrapper">
@@ -118,6 +128,18 @@
                 <h2 id="stats-title">Księga Wiedzy</h2>
 
                 <div class="modal-content-scroll">
+                    <div class="stats-group player-stats" aria-live="polite">
+                        <p class="stats-label">Statystyki gracza</p>
+                        <div class="player-stats-values">
+                            <span>Gry: <b id="stats-games">0</b></span>
+                            <span>Wygrane: <b id="stats-wins">0</b></span>
+                            <span>Przegrane: <b id="stats-losses">0</b></span>
+                            <span>Najlepsza próba: <b id="stats-best-tries">-</b></span>
+                            <span>Najgorsza próba: <b id="stats-worst-tries">-</b></span>
+                            <span>Seria: <b id="stats-streak">0</b></span>
+                            <span>Rekord serii: <b id="stats-best-streak">0</b></span>
+                        </div>
+                    </div>
                     <div class="stats-group">
                         <p class="stats-label">Kategorie Potworów (ilość w bazie)</p>
                         <div id="stats-classes" class="stats-grid"></div>
@@ -137,8 +159,15 @@
         </div>
     </div>
 
+    <script src="js/modules/helpers.js" defer></script>
+    <script src="js/modules/notifications.js" defer></script>
+    <script src="js/modules/statistics.js" defer></script>
+    <script src="js/modules/autocomplete.js" defer></script>
+    <script src="js/modules/modal.js" defer></script>
+    <script src="js/modules/game-mode.js" defer></script>
     <script src="js/baza_potworow.js" defer></script>
     <script src="js/game.js" defer></script>
     <script src="js/snow.js" defer></script>
+    <script src="js/pwa.js" defer></script>
 </body>
 </html>

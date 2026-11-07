@@ -23,71 +23,53 @@
     const correctName     = $("correct-item-name");
     const winStats        = $("win-stats");
     const restartButton   = $("restart-button");
+    const switchPracticeButton = $("switch-practice-button");
+    const modeSelect       = $("game-mode");
     const giveUpButton    = $("btn-giveup");
     const toastContainer  = $("toast-container");
 
     // ---------- Pomocnicze ----------
-    function escapeHtml(str) {
-        if (str === null || str === undefined) return "";
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
+    const shared = window.PolandleModules;
+    const escapeHtml = shared.helpers.escapeHtml;
+    const getItemMinLevel = shared.helpers.getItemMinLevel;
+    const getItemWeight = shared.helpers.getItemWeight;
+    const getItemAtk = shared.helpers.getItemAtk;
+    const getItemDef = shared.helpers.getItemDef;
+    const getItemLifeSteal = shared.helpers.getItemLifesteal;
+    const getItemName = shared.helpers.getItemName;
+    const getItemType = shared.helpers.getItemType;
+    const getItemKind = shared.helpers.getItemKind;
+    const getItemBoosts = shared.helpers.getItemBoosts;
+    const getItemWeaknesses = shared.helpers.getItemWeaknesses;
+    const toast = shared.notifications.toast;
+    const loadStats = () => shared.statistics.loadStats("items");
+    const recordGame = result => shared.statistics.recordGame("items", result);
+
+    function renderPlayerStats() {
+        const stats = loadStats();
+        $("stats-games").textContent = stats.games;
+        $("stats-wins").textContent = stats.wins;
+        $("stats-losses").textContent = stats.gaveUp;
+        $("stats-best-tries").textContent = stats.bestTries ?? "-";
+        $("stats-worst-tries").textContent = stats.worstTries ?? "-";
+        $("stats-streak").textContent = stats.currentStreak;
+        $("stats-best-streak").textContent = stats.bestStreak;
     }
 
-    function getItemMinLevel(item) {
-        if (!item) return '-';
-        if (item.min_poziom !== undefined && item.min_poziom !== null) return item.min_poziom;
-        if (item.min_level !== undefined && item.min_level !== null) return item.min_level;
-        if (item.poziom !== undefined && item.poziom !== null) return item.poziom;
-        if (item.lvl !== undefined && item.lvl !== null) return item.lvl;
-        return '-';
+    function configureEndActions(isDaily) {
+        restartButton.classList.toggle("hidden", isDaily);
+        switchPracticeButton.classList.toggle("hidden", !isDaily);
     }
 
-    function getItemWeight(item) {
-        if (!item) return '-';
-        if (item.rate !== undefined && item.rate !== null) return item.rate;
-        if (item.waga !== undefined && item.waga !== null) return item.waga;
-        if (item.weight !== undefined && item.weight !== null) return item.weight;
-        return '-';
-    }
-
-    function getItemAtk(item) {
-        if (!item) return '-';
-        return item.atk !== undefined && item.atk !== null ? item.atk : (item.attack !== undefined ? item.attack : '-');
-    }
-
-    function getItemDef(item) {
-        if (!item) return '-';
-        return item.def !== undefined && item.def !== null ? item.def : (item.defence !== undefined ? item.defence : '-');
-    }
-
-    function getItemLifeSteal(item) {
-        if (!item) return '-';
-        return item.lifesteal !== undefined && item.lifesteal !== null ? item.lifesteal : (item.ls !== undefined ? item.ls : '-');
-    }
-
-    function toast(message, kind /* 'info' | 'error' | 'success' */) {
-        if (!toastContainer) return;
-        const el = document.createElement("div");
-        el.className = "toast toast-" + (kind || "info");
-        el.textContent = message;
-        toastContainer.appendChild(el);
-        setTimeout(() => el.classList.add("toast-out"), 2200);
-        setTimeout(() => el.remove(), 2800);
-    }
-
-    // ---------- Statystyki gracza (localStorage) ----------
-    const STATS_KEY = "polandle:items:stats:v1";
-    function loadStats() {
-        try {
-            return JSON.parse(localStorage.getItem(STATS_KEY)) || { games: 0, wins: 0, gaveUp: 0, bestTries: null };
-        } catch { return { games: 0, wins: 0, gaveUp: 0, bestTries: null }; }
-    }
-    function saveStats(stats) {
-        try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch { /* quota */ }
+    function showCompletedDaily() {
+        state.gameOver = true;
+        guessInput.disabled = true;
+        giveUpButton.disabled = true;
+        winMessage.querySelector("h2").textContent = "Dzisiejsza zagadka zakończona";
+        correctName.parentElement.classList.add("hidden");
+        winStats.textContent = "Wróć jutro albo przejdź do trybu treningowego.";
+        configureEndActions(true);
+        winMessage.classList.remove("hidden");
     }
 
     // =========================================================================
@@ -111,8 +93,10 @@
             const winTitle = winMessage.querySelector("h2");
             if (winTitle) winTitle.textContent = "Gratulacje!";
             const guessedParagraph = correctName ? correctName.parentElement : null;
-            if (guessedParagraph) guessedParagraph.style.display = "";
+            if (guessedParagraph) guessedParagraph.classList.remove("hidden");
         }
+        configureEndActions(false);
+        renderPlayerStats();
 
         if (guessInput) {
             guessInput.value = "";
@@ -120,9 +104,15 @@
             guessInput.setAttribute("aria-expanded", "false");
             guessInput.setAttribute("aria-activedescendant", "");
         }
+        if (giveUpButton) giveUpButton.disabled = false;
         if (suggestionsBox) suggestionsBox.innerHTML = "";
 
-        state.target = przedmioty[Math.floor(Math.random() * przedmioty.length)];
+        shared.gameMode.bindModeSelect($("game-mode"), initGame);
+        state.target = shared.gameMode.chooseTarget(przedmioty, "items");
+        if (shared.gameMode.getMode() === "daily" && shared.gameMode.isDailyCompleted("items")) {
+            showCompletedDaily();
+            return;
+        }
 
         if (guessInput) guessInput.focus();
     }
@@ -291,9 +281,9 @@
         row.appendChild(createCell(guessedLS ?? "-", lsMatch ? "correct" : "wrong"));
 
         // 9. Wzmacnia
-        row.appendChild(createArrayMatchCell(guessed.wzmacnia, state.target.wzmacnia));
+        row.appendChild(createArrayMatchCell(getItemBoosts(guessed), getItemBoosts(state.target)));
         // 10. Osłabia
-        row.appendChild(createArrayMatchCell(guessed.oslabia || guessed.osłabia, state.target.oslabia || state.target.osłabia));
+        row.appendChild(createArrayMatchCell(getItemWeaknesses(guessed), getItemWeaknesses(state.target)));
 
         Array.from(row.children).forEach((cell, index) => {
             cell.style.animationDelay = `${index * 0.15}s`;
@@ -446,17 +436,17 @@
         if (correctName) correctName.textContent = targetName;
 
         const tries = state.guessed.length;
-        const stats = loadStats();
-        stats.games += 1;
-        stats.wins  += 1;
-        if (stats.bestTries === null || tries < stats.bestTries) stats.bestTries = tries;
-        saveStats(stats);
+        const stats = recordGame({ won: true, tries });
+        if (shared.gameMode.getMode() === "daily") shared.gameMode.markDailyCompleted("items");
 
         if (winStats) {
             winStats.textContent =
-                `Prób: ${tries} • Najlepszy wynik: ${stats.bestTries} • ` +
+                `Prób: ${tries} • Najlepszy wynik: ${stats.bestTries} • Najgorszy wynik: ${stats.worstTries} • ` +
                 `Wygrane: ${stats.wins}/${stats.games}`;
         }
+
+        configureEndActions(shared.gameMode.getMode() === "daily");
+        renderPlayerStats();
 
         if (winMessage) winMessage.classList.remove("hidden");
     }
@@ -471,12 +461,20 @@
             if (guessInput) guessInput.disabled = true;
             if (suggestionsBox) suggestionsBox.innerHTML = "";
 
-            const stats = loadStats();
-            stats.games  += 1;
-            stats.gaveUp += 1;
-            saveStats(stats);
+            const stats = recordGame({ won: false });
 
             const targetName = state.target.nazwa || state.target.name;
+
+            if (shared.gameMode.getMode() === "daily") {
+                shared.gameMode.markDailyCompleted("items");
+                correctName.parentElement.classList.add("hidden");
+                winMessage.querySelector("h2").textContent = "Dzisiejsza zagadka zakończona";
+                winStats.textContent = "Poddano zagadkę. Wróć jutro albo przejdź do trybu treningowego.";
+                configureEndActions(true);
+                renderPlayerStats();
+                winMessage.classList.remove("hidden");
+                return;
+            }
 
             if (winMessage) {
                 winMessage.classList.add("giveup-mode");
@@ -500,8 +498,53 @@
     // 7. Restart
     // =========================================================================
     if (restartButton) {
-        restartButton.addEventListener("click", initGame);
+        restartButton.addEventListener("click", () => {
+            if (shared.gameMode.getMode() === "practice") initGame();
+        });
     }
+    if (switchPracticeButton) {
+        switchPracticeButton.addEventListener("click", () => {
+            shared.gameMode.setMode("practice");
+            modeSelect.value = "practice";
+            initGame();
+        });
+    }
+
+    function renderItemKnowledge() {
+        if (!Array.isArray(przedmioty)) return;
+        renderPlayerStats();
+
+        const counts = (values) => values.reduce((result, value) => {
+            const key = String(value || "Brak");
+            result[key] = (result[key] || 0) + 1;
+            return result;
+        }, {});
+
+        const effects = (key) => przedmioty.flatMap(item => {
+            const value = key === "boosts" ? getItemBoosts(item) : getItemWeaknesses(item);
+            return Array.isArray(value) ? value : (value ? [value] : []);
+        });
+
+        const renderCounts = (id, values) => {
+            const element = $(id);
+            if (!element) return;
+            element.innerHTML = Object.entries(counts(values))
+                .sort((a, b) => b[1] - a[1])
+                .map(([name, count]) => `<span class="stat-item">${escapeHtml(name)}<span class="stat-number">${count}</span></span>`)
+                .join("") || '<span class="stats-empty">Brak danych</span>';
+        };
+
+        renderCounts("stats-types", przedmioty.map(item => `${getItemType(item)} / ${getItemKind(item)}`));
+        renderCounts("stats-wzmacnia", effects("boosts"));
+        renderCounts("stats-oslabia", effects("weaknesses"));
+    }
+
+    shared.modal.bindModal({
+        modal: $("stats-modal"),
+        openButton: $("open-stats"),
+        closeButton: $("close-stats"),
+        render: renderItemKnowledge
+    });
 
     // Start automatyczny
     if (document.readyState === "loading") {

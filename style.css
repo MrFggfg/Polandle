@@ -5,6 +5,20 @@
     --accent-color: #ff4655;
     --border-color: #333;
 }
+
+@font-face {
+    font-family: 'Amaranth';
+    src: url('fonts/Amaranth-Bold.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Black Chancery';
+    src: url('fonts/BlackChancery.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 400;
+}
 /* Styl dla całej strony, tabeli i wyszukiwarki */
 body, input, table {
     font-family: 'Amaranth', 'Carlito', sans-serif;
@@ -28,7 +42,7 @@ body {
     background-color: rgba(0, 0, 0, 0.6); /* Przyciemnienie obrazka o 60% */
 
     /* Reszta Twoich stylów */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Amaranth', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-color);
     margin: 0;
     padding: 20px;
@@ -433,6 +447,38 @@ tr {
 .win-message button:hover {
     background: #8c734b;
     color: white;
+}
+
+.player-stats {
+    margin: 0;
+}
+
+.player-stats-values {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 14px;
+    color: #e8d8b7;
+    font-size: 0.88rem;
+}
+
+.player-stats-values span {
+    padding: 3px 8px;
+    border-left: 1px solid rgba(244, 211, 138, 0.3);
+}
+
+.player-stats-values b {
+    color: #fff0bf;
+}
+
+.win-message #switch-practice-button {
+    border-color: #b78a4a;
+    color: #f0c46d;
+}
+
+.win-message #switch-practice-button:hover {
+    background: #b78a4a;
+    color: #20150e;
 }
 
 .hidden {
@@ -889,9 +935,36 @@ th.sortable:hover {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
+[role="button"]:focus-visible,
+select:focus-visible,
 [role="option"]:focus-visible {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid #f0c46d;
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(240, 196, 109, 0.18);
+}
+
+.mode-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 14px;
+    color: #ead9b5;
+    font-size: 0.9rem;
+}
+
+.mode-control select {
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1px solid rgba(244, 211, 138, 0.28);
+    border-radius: 6px;
+    background: rgba(31, 22, 17, 0.75);
+    color: #f7e4b7;
+    font: inherit;
+}
+
+th.sortable[role="button"] {
+    cursor: pointer;
 }
 
 /* Ikony-przyciski (zastępują <img>-jako-button) */

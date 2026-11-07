@@ -33,47 +33,53 @@
     const correctName     = $("correct-monster-name");
     const winStats        = $("win-stats");
     const restartButton   = $("restart-button");
+    const switchPracticeButton = $("switch-practice-button");
+    const modeSelect       = $("game-mode");
     const hintBox         = $("hint-message");
     const toastContainer  = $("toast-container");
 
     // ---------- Pomocnicze[cite: 1] ----------
-    function escapeHtml(str) {
-        if (str === null || str === undefined) return "";
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
+    const shared = window.PolandleModules;
+    const escapeHtml = shared.helpers.escapeHtml;
+    const toast = shared.notifications.toast;
+    const loadStats = () => shared.statistics.loadStats("monsters");
+    const recordGame = result => shared.statistics.recordGame("monsters", result);
+    const chooseTarget = shared.gameMode.chooseTarget;
+
+    function renderPlayerStats() {
+        const stats = loadStats();
+        $("stats-games").textContent = stats.games;
+        $("stats-wins").textContent = stats.wins;
+        $("stats-losses").textContent = stats.gaveUp;
+        $("stats-best-tries").textContent = stats.bestTries ?? "-";
+        $("stats-worst-tries").textContent = stats.worstTries ?? "-";
+        $("stats-streak").textContent = stats.currentStreak;
+        $("stats-best-streak").textContent = stats.bestStreak;
     }
 
-    function toast(message, kind /* 'info' | 'error' | 'success' */) {
-        if (!toastContainer) return;
-        const el = document.createElement("div");
-        el.className = "toast toast-" + (kind || "info");
-        el.textContent = message;
-        toastContainer.appendChild(el);
-        // usuń po animacji[cite: 1]
-        setTimeout(() => el.classList.add("toast-out"), 2200);
-        setTimeout(() => el.remove(), 2800);
+    function configureEndActions(isDaily) {
+        restartButton.classList.toggle("hidden", isDaily);
+        switchPracticeButton.classList.toggle("hidden", !isDaily);
     }
 
-    // ---------- Statystyki gracza (localStorage)[cite: 1] ----------
-    const STATS_KEY = "polandle:stats:v1";
-    function loadStats() {
-        try {
-            return JSON.parse(localStorage.getItem(STATS_KEY)) || { games: 0, wins: 0, gaveUp: 0, bestTries: null };
-        } catch { return { games: 0, wins: 0, gaveUp: 0, bestTries: null }; }
-    }
-    function saveStats(stats) {
-        try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch { /* quota */ }
+    function showCompletedDaily() {
+        state.gameOver = true;
+        guessInput.disabled = true;
+        $("btn-giveup").disabled = true;
+        lockHint("btn-hint1", "Dzisiejsza zagadka została już rozegrana");
+        lockHint("btn-hint2", "Dzisiejsza zagadka została już rozegrana");
+        winMessage.querySelector("h2").textContent = "Dzisiejsza zagadka zakończona";
+        correctName.parentElement.classList.add("hidden");
+        winStats.textContent = "Wróć jutro albo przejdź do trybu treningowego.";
+        configureEndActions(true);
+        winMessage.classList.remove("hidden");
     }
 
     // Pomocnicza funkcja generująca tekst statystyk rozegranych gier[cite: 1]
     function getPlayerStatsText(stats, tries = null) {
         let text = `Rozegrane: ${stats.games} • Wygrane: ${stats.wins} • Przegrane: ${stats.gaveUp}`;
         if (tries !== null) {
-            text = `Prób: ${tries} • Najlepszy wynik: ${stats.bestTries ?? '-'} • ` + text;
+            text = `Prób: ${tries} • Najlepszy wynik: ${stats.bestTries ?? '-'} • Najgorszy wynik: ${stats.worstTries ?? '-'} • ` + text;
         }
         return text;
     }
@@ -94,8 +100,12 @@
 
         guessesBody.innerHTML = "";
         winMessage.classList.add("hidden");
+        winMessage.querySelector("h2").textContent = "Gratulacje!";
+        correctName.parentElement.classList.remove("hidden");
+        configureEndActions(false);
         guessInput.value = "";
         guessInput.disabled = false;
+        $("btn-giveup").disabled = false;
         guessInput.setAttribute("aria-expanded", "false");
         guessInput.setAttribute("aria-activedescendant", "");
         suggestionsBox.innerHTML = "";
@@ -106,7 +116,13 @@
         hintBox.classList.add("hidden");
         hintBox.innerHTML = "";
 
-        state.target = monsters[Math.floor(Math.random() * monsters.length)];
+        shared.gameMode.bindModeSelect($("game-mode"), initGame);
+        renderPlayerStats();
+        state.target = chooseTarget(monsters, "monsters");
+        if (shared.gameMode.getMode() === "daily" && shared.gameMode.isDailyCompleted("monsters")) {
+            showCompletedDaily();
+            return;
+        }
         // (nie logujemy nazwy potwora — cheat-mode wycięty)[cite: 1]
 
         guessInput.focus();
@@ -391,21 +407,28 @@
         correctName.textContent = state.target.name;
 
         const tries = state.guessed.length;
-        const stats = loadStats();
-        stats.games += 1;
-        stats.wins  += 1;
-        if (stats.bestTries === null || tries < stats.bestTries) stats.bestTries = tries;
-        saveStats(stats);
+        const stats = recordGame({ won: true, tries });
+        if (shared.gameMode.getMode() === "daily") shared.gameMode.markDailyCompleted("monsters");
 
         // Wyświetlanie statystyk rozegranych gier przy wygranej[cite: 1]
         winStats.textContent = getPlayerStatsText(stats, tries);
+        correctName.parentElement.classList.remove("hidden");
+        configureEndActions(shared.gameMode.getMode() === "daily");
+        renderPlayerStats();
         winMessage.classList.remove("hidden");
     }
 
     // =========================================================================
     // 7. Restart + przyciski[cite: 1]
     // =========================================================================
-    restartButton.addEventListener("click", initGame);
+    restartButton.addEventListener("click", () => {
+        if (shared.gameMode.getMode() === "practice") initGame();
+    });
+    switchPracticeButton.addEventListener("click", () => {
+        shared.gameMode.setMode("practice");
+        modeSelect.value = "practice";
+        initGame();
+    });
 
     // Podpowiedź 1[cite: 1]
     $("btn-hint1").addEventListener("click", () => {
@@ -442,10 +465,18 @@
         guessInput.disabled = true;
         suggestionsBox.innerHTML = "";
 
-        const stats = loadStats();
-        stats.games  += 1;
-        stats.gaveUp += 1;
-        saveStats(stats);
+        const stats = recordGame({ won: false });
+        if (shared.gameMode.getMode() === "daily") {
+            shared.gameMode.markDailyCompleted("monsters");
+            correctName.parentElement.classList.add("hidden");
+            winMessage.querySelector("h2").textContent = "Dzisiejsza zagadka zakończona";
+            winStats.textContent = "Poddano zagadkę. Wróć jutro albo przejdź do trybu treningowego.";
+            configureEndActions(true);
+            renderPlayerStats();
+            winMessage.classList.remove("hidden");
+            hintBox.classList.add("hidden");
+            return;
+        }
 
         // Wyświetlanie statystyk rozegranych gier przy przegranej/poddaniu[cite: 1]
         hintBox.innerHTML = `
@@ -461,48 +492,16 @@
     // =========================================================================
     // 8. Modal Księgi Wiedzy (dostępny z klawiatury)[cite: 1]
     // =========================================================================
-    const btnStats  = $("btn-stats");
-    const statsModal = $("stats-modal");
-    const closeStats = $("close-stats");
-    let lastFocusBeforeModal = null;
-
-    function openModal() {
-        renderKsiegaWiedzy();
-        
-        statsModal.classList.remove("hidden");
-        statsModal.removeAttribute("hidden");
-        
-        statsModal.classList.add("active");
-        statsModal.setAttribute("aria-hidden", "false");
-        
-        lastFocusBeforeModal = document.activeElement;
-        closeStats.focus();
-        document.addEventListener("keydown", modalKeyHandler);
-    }
-    
-    function closeModal() {
-        statsModal.classList.remove("active");
-        
-        statsModal.classList.add("hidden");     
-        statsModal.setAttribute("hidden", "true"); 
-        
-        statsModal.setAttribute("aria-hidden", "true");
-        document.removeEventListener("keydown", modalKeyHandler);
-        if (lastFocusBeforeModal?.focus) lastFocusBeforeModal.focus();
-    }
-
-    function modalKeyHandler(e) {
-        if (e.key === "Escape") closeModal();
-    }
-
-    if (btnStats && statsModal && closeStats) {
-        btnStats.addEventListener("click", openModal);
-        closeStats.addEventListener("click", closeModal);
-        statsModal.addEventListener("click", (e) => { if (e.target === statsModal) closeModal(); });
-    }
+    shared.modal.bindModal({
+        modal: $("stats-modal"),
+        openButton: $("btn-stats"),
+        closeButton: $("close-stats"),
+        render: renderKsiegaWiedzy
+    });
 
     function renderKsiegaWiedzy() {
         if (typeof monsters === "undefined" || !Array.isArray(monsters)) return;
+        renderPlayerStats();
 
         const classCounts = {};
         const attackTypes = new Set();

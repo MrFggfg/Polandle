@@ -232,7 +232,11 @@
         }
 
         document.querySelectorAll('th.sortable').forEach((th) => {
-            th.addEventListener('click', () => {
+            th.setAttribute('role', 'button');
+            th.setAttribute('tabindex', '0');
+            th.setAttribute('aria-label', `Sortuj według ${th.textContent.replace('↕', '').trim()}`);
+
+            const sort = () => {
                 const key = th.getAttribute('data-sort');
                 if (!key) return;
 
@@ -243,6 +247,16 @@
                     bestiaryState.sortState.dir = 'asc';
                 }
                 applyFiltersAndRender();
+                document.querySelectorAll('th.sortable').forEach(header => header.setAttribute('aria-sort', 'none'));
+                th.setAttribute('aria-sort', bestiaryState.sortState.dir === 'asc' ? 'ascending' : 'descending');
+            };
+
+            th.addEventListener('click', sort);
+            th.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    sort();
+                }
             });
         });
     }
