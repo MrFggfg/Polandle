@@ -31,7 +31,8 @@ const APP_SHELL = [
     "js/modules/statistics.js",
     "js/modules/autocomplete.js",
     "js/modules/modal.js",
-    "js/modules/game-mode.js"
+    "js/modules/game-mode.js",
+    "js/modules/game-session.js"
 ];
 
 self.addEventListener("install", event => {

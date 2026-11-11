@@ -45,6 +45,7 @@
     const loadStats = () => shared.statistics.loadStats("monsters");
     const recordGame = result => shared.statistics.recordGame("monsters", result);
     const chooseTarget = shared.gameMode.chooseTarget;
+    const gameSession = shared.gameSession;
 
     function renderPlayerStats() {
         const stats = loadStats();
@@ -73,6 +74,59 @@
         winStats.textContent = "Wróć jutro albo przejdź do trybu treningowego.";
         configureEndActions(true);
         winMessage.classList.remove("hidden");
+    }
+
+    function saveSession(outcome = null, tries = null) {
+        const mode = shared.gameMode.getMode();
+        gameSession.save("monsters", mode, {
+            targetName: state.target?.name,
+            guessed: state.guessed,
+            wrongGuesses: state.wrongGuesses,
+            gameOver: state.gameOver,
+            outcome,
+            tries
+        });
+    }
+
+    function showPracticeGiveUp(stats) {
+        state.gameOver = true;
+        guessInput.disabled = true;
+        suggestionsBox.innerHTML = "";
+        correctName.parentElement.classList.add("hidden");
+        winMessage.querySelector("h2").textContent = "Poddajesz się!";
+        winStats.innerHTML = `Poszukiwanym potworem był: <b>${escapeHtml(state.target.name)}</b><br>` +
+            `<span>Gry: ${stats.games} • Przegrane: ${stats.gaveUp}</span>`;
+        configureEndActions(false);
+        renderPlayerStats();
+        winMessage.classList.remove("hidden");
+    }
+
+    function showWinResult(stats, tries) {
+        state.gameOver = true;
+        guessInput.disabled = true;
+        correctName.parentElement.classList.remove("hidden");
+        correctName.textContent = state.target.name;
+        winMessage.querySelector("h2").textContent = "Gratulacje!";
+        winStats.textContent = getPlayerStatsText(stats, tries);
+        configureEndActions(shared.gameMode.getMode() === "daily");
+        renderPlayerStats();
+        winMessage.classList.remove("hidden");
+    }
+
+    function restoreSession(saved) {
+        if (!saved || saved.targetName !== state.target.name) return false;
+        state.guessed = Array.isArray(saved.guessed) ? saved.guessed : [];
+        state.wrongGuesses = Number(saved.wrongGuesses) || 0;
+        state.guessed.forEach(name => {
+            const guessed = monsters.find(monster => monster.name === name);
+            if (guessed) renderGuessRow(guessed);
+        });
+        if (state.wrongGuesses >= 3) unlockHint("btn-hint1", "Kliknij, aby zobaczyć podpowiedź");
+        if (state.wrongGuesses >= 6) unlockHint("btn-hint2", "Druga podpowiedź");
+        if (!saved.gameOver) return true;
+        if (saved.outcome === "win") showWinResult(loadStats(), saved.tries || state.guessed.length);
+        else showPracticeGiveUp(loadStats());
+        return true;
     }
 
     // Pomocnicza funkcja generująca tekst statystyk rozegranych gier[cite: 1]
@@ -118,11 +172,20 @@
 
         shared.gameMode.bindModeSelect($("game-mode"), initGame);
         renderPlayerStats();
-        state.target = chooseTarget(monsters, "monsters");
+        const mode = shared.gameMode.getMode();
+        const saved = gameSession.load("monsters", mode);
+        state.target = saved?.targetName
+            ? monsters.find(monster => monster.name === saved.targetName) || chooseTarget(monsters, "monsters")
+            : chooseTarget(monsters, "monsters");
         if (shared.gameMode.getMode() === "daily" && shared.gameMode.isDailyCompleted("monsters")) {
             showCompletedDaily();
             return;
         }
+        if (restoreSession(saved)) {
+            guessInput.focus();
+            return;
+        }
+        saveSession();
         // (nie logujemy nazwy potwora — cheat-mode wycięty)[cite: 1]
 
         guessInput.focus();
@@ -266,6 +329,7 @@
             state.wrongGuesses++;
             if (state.wrongGuesses >= 3) unlockHint("btn-hint1", "Kliknij, aby zobaczyć podpowiedź");
             if (state.wrongGuesses >= 6) unlockHint("btn-hint2", "Druga podpowiedź");
+            saveSession();
         }
     }
 
@@ -409,20 +473,20 @@
         const tries = state.guessed.length;
         const stats = recordGame({ won: true, tries });
         if (shared.gameMode.getMode() === "daily") shared.gameMode.markDailyCompleted("monsters");
+        saveSession("win", tries);
 
         // Wyświetlanie statystyk rozegranych gier przy wygranej[cite: 1]
-        winStats.textContent = getPlayerStatsText(stats, tries);
-        correctName.parentElement.classList.remove("hidden");
-        configureEndActions(shared.gameMode.getMode() === "daily");
-        renderPlayerStats();
-        winMessage.classList.remove("hidden");
+        showWinResult(stats, tries);
     }
 
     // =========================================================================
     // 7. Restart + przyciski[cite: 1]
     // =========================================================================
     restartButton.addEventListener("click", () => {
-        if (shared.gameMode.getMode() === "practice") initGame();
+        if (shared.gameMode.getMode() === "practice") {
+            gameSession.clear("monsters", "practice");
+            initGame();
+        }
     });
     switchPracticeButton.addEventListener("click", () => {
         shared.gameMode.setMode("practice");
@@ -468,6 +532,7 @@
         const stats = recordGame({ won: false });
         if (shared.gameMode.getMode() === "daily") {
             shared.gameMode.markDailyCompleted("monsters");
+            saveSession("giveup", state.guessed.length);
             correctName.parentElement.classList.add("hidden");
             winMessage.querySelector("h2").textContent = "Dzisiejsza zagadka zakończona";
             winStats.textContent = "Poddano zagadkę. Wróć jutro albo przejdź do trybu treningowego.";
@@ -477,6 +542,10 @@
             hintBox.classList.add("hidden");
             return;
         }
+
+        saveSession("giveup", state.guessed.length);
+        showPracticeGiveUp(stats);
+        return;
 
         // Wyświetlanie statystyk rozegranych gier przy przegranej/poddaniu[cite: 1]
         hintBox.innerHTML = `
