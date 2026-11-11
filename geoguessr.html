@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Polandle - Zgadnij Mapke</title>
+    <link rel="icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Przejdz do tresci</a>
+    <div class="container map-game-container">
+        <header>
+            <h1>Zgadnij Mapke</h1>
+            <p class="game-instructions">Wybierz pule map, zobacz fragment i odgadnij nazwe lokacji.</p>
+            <nav class="nav-menu" aria-label="Nawigacja glowna">
+                <a href="index.html" class="nav-link">← Menu glowne</a>
+            </nav>
+        </header>
+
+        <main id="main">
+            <section class="map-pool-panel" aria-labelledby="map-pool-title">
+                <h2 id="map-pool-title">Wybierz pule map</h2>
+                <div class="map-pool-options">
+                    <label class="map-pool-option">
+                        <input type="checkbox" name="map-pool" value="gorne" checked>
+                        <span>Mapy gorne</span>
+                    </label>
+                    <label class="map-pool-option">
+                        <input type="checkbox" name="map-pool" value="dolne">
+                        <span>Mapy dolne</span>
+                    </label>
+                    <label class="map-pool-option">
+                        <input type="checkbox" name="map-pool" value="pomieszczenia">
+                        <span>Pomieszczenia</span>
+                    </label>
+                </div>
+                <button type="button" id="new-map-button" class="map-action-button">Losuj mapke</button>
+            </section>
+
+            <section class="map-game-panel" aria-labelledby="map-view-title">
+                <h2 id="map-view-title" class="sr-only">Widok mapy</h2>
+                <div id="map-stage" class="map-stage">
+                    <img id="map-image" alt="Zakryty fragment mapy" draggable="false">
+                    <div class="map-fog" aria-hidden="true"></div>
+                </div>
+                <p id="map-progress" class="map-progress" aria-live="polite">Wybierz pule i rozpocznij gre.</p>
+
+                <div class="map-guess-row">
+                    <label for="map-guess-input" class="sr-only">Nazwa mapy</label>
+                    <input id="map-guess-input" type="text" placeholder="Wpisz nazwe mapy..." autocomplete="off" spellcheck="false">
+                    <button id="map-submit-button" type="button" class="map-action-button">Sprawdz</button>
+                </div>
+                <p id="map-status" class="map-status" role="status" aria-live="polite"></p>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/mapy.js" defer></script>
+    <script src="js/game_mapy.js" defer></script>
+    <script src="js/snow.js" defer></script>
+    <script src="js/pwa.js" defer></script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     layer.id = 'snow-layer';
     layer.setAttribute('aria-hidden', 'true');
 
-    const count = 55;
+    const count = 155;
     for (let i = 0; i < count; i++) {
         const flake = document.createElement('span');
         flake.className = 'snowflake';

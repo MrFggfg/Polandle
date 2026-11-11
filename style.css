@@ -1216,3 +1216,180 @@ td.col-wzmacnia .badge {
     padding: 2px 6px;
     font-size: 0.8em;
 }
+
+/* ========================================================================
+ * PROTOTYP ZGADYWANIA MAP
+ * ====================================================================== */
+.map-game-container {
+    max-width: 720px !important;
+}
+
+.map-pool-panel,
+.map-game-panel {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 0 auto 18px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.map-pool-panel h2 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 1.05rem;
+    text-align: center;
+}
+
+.map-pool-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.map-pool-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 0.86rem;
+}
+
+.map-pool-option input {
+    accent-color: var(--accent-color);
+}
+
+.map-action-button {
+    min-height: 36px;
+    padding: 6px 13px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+    transition: background .2s, box-shadow .2s, transform .2s;
+}
+
+.map-action-button:hover:not(:disabled) {
+    background: rgba(255, 70, 85, 0.08);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(255, 70, 85, 0.28);
+    transform: translateY(-1px);
+}
+
+.map-action-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.map-pool-panel > .map-action-button {
+    display: block;
+    margin: 10px auto 0;
+}
+
+.map-stage {
+    position: relative;
+    width: min(100%, 256px);
+    aspect-ratio: 1;
+    margin: 0 auto 18px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at 22% 28%, rgba(220, 232, 236, 0.18), transparent 28%),
+        radial-gradient(circle at 78% 72%, rgba(126, 145, 153, 0.22), transparent 34%),
+        linear-gradient(145deg, #66747a, #273138 72%, #182126);
+    border: none;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, .68), 0 12px 30px rgba(0, 0, 0, .35);
+}
+
+.map-stage::before {
+    content: "MGŁA MAPY";
+    position: absolute;
+    z-index: 0;
+    color: rgba(255, 255, 255, .18);
+    letter-spacing: .16em;
+    font-size: .75rem;
+}
+
+#map-image {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+    clip-path: circle(64px at 50% 50%);
+    transition: clip-path .45s ease;
+}
+
+#map-image.map-image-loading {
+    visibility: hidden;
+}
+
+#map-image.map-image-resetting {
+    transition: none !important;
+}
+
+.map-fog {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at var(--reveal-x, 50%) var(--reveal-y, 50%), transparent 0 36px, rgba(225, 235, 238, .16) 64px, rgba(128, 145, 151, .48) 120px, rgba(35, 44, 49, .9) 100%),
+        radial-gradient(circle at 20% 30%, rgba(242, 248, 248, .12), transparent 32%),
+        radial-gradient(circle at 82% 76%, rgba(205, 220, 224, .10), transparent 38%);
+}
+
+.map-progress,
+.map-status {
+    display: none;
+}
+
+.map-status {
+    color: #fff;
+    font-weight: bold;
+}
+
+.map-guess-row {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+    max-width: 430px;
+    margin: 18px auto 0;
+}
+
+#map-guess-input {
+    flex: 0 1 280px;
+    width: 280px;
+    min-width: 0;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(36, 36, 36, .2);
+    color: #fff;
+    font: inherit;
+}
+
+@media (max-width: 560px) {
+    .map-pool-panel,
+    .map-game-panel { padding: 12px; }
+    .map-guess-row { flex-direction: column; }
+    .map-action-button { width: 100%; }
+}
