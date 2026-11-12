@@ -1390,6 +1390,17 @@ td.col-wzmacnia .badge {
 @media (max-width: 560px) {
     .map-pool-panel,
     .map-game-panel { padding: 12px; }
-    .map-guess-row { flex-direction: column; }
-    .map-action-button { width: 100%; }
+    .map-guess-row {
+        width: min(100%, 256px);
+        flex-direction: column;
+        gap: 6px;
+    }
+    #map-guess-input {
+        width: 100%;
+        flex-basis: auto;
+        box-sizing: border-box;
+    }
+    .map-guess-row .map-action-button {
+        width: 100%;
+    }
 }
