@@ -38,11 +38,30 @@
                         <span>Pomieszczenia</span>
                     </label>
                 </div>
+
+                <div class="map-mode-options" role="radiogroup" aria-labelledby="map-mode-title">
+                    <span id="map-mode-title" class="map-mode-label">Tryb gry:</span>
+                    <label class="map-mode-option">
+                        <input type="radio" name="map-mode" value="classic" checked>
+                        <span>Klasyczny</span>
+                    </label>
+                    <label class="map-mode-option">
+                        <input type="radio" name="map-mode" value="challenge">
+                        <span>Wyzwanie (60 s)</span>
+                    </label>
+                </div>
+
                 <button type="button" id="new-map-button" class="map-action-button">Losuj mapke</button>
+                <button type="button" id="challenge-start-button" class="map-action-button hidden">Start wyzwania</button>
             </section>
 
             <section class="map-game-panel" aria-labelledby="map-view-title">
                 <h2 id="map-view-title" class="sr-only">Widok mapy</h2>
+                <div id="challenge-hud" class="challenge-hud hidden" aria-live="polite">
+                    <span class="challenge-stat">Pozostalo: <b id="challenge-time">60</b> s</span>
+                    <span class="challenge-stat">Trafienia: <b id="challenge-score">0</b></span>
+                    <span class="challenge-stat">Rekord: <b id="challenge-best">0</b></span>
+                </div>
                 <div id="map-stage" class="map-stage">
                     <img id="map-image" alt="Zakryty fragment mapy" draggable="false">
                     <div class="map-fog" aria-hidden="true"></div>
@@ -54,6 +73,7 @@
                     <input id="map-guess-input" type="text" placeholder="Wpisz nazwe mapy..." autocomplete="off" spellcheck="false">
                     <button id="map-submit-button" type="button" class="map-action-button">Sprawdz</button>
                 </div>
+                <button type="button" id="map-giveup-button" class="map-action-button map-giveup-button">Poddaj sie</button>
                 <p id="map-status" class="map-status" role="status" aria-live="polite"></p>
             </section>
         </main>

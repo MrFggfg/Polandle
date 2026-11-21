@@ -1265,6 +1265,68 @@ td.col-wzmacnia .badge {
     accent-color: var(--accent-color);
 }
 
+.map-mode-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    color: #ddd;
+}
+
+.map-mode-label {
+    font-weight: bold;
+    color: #fff;
+}
+
+.map-mode-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 0.86rem;
+}
+
+.map-mode-option input {
+    accent-color: var(--accent-color);
+}
+
+.challenge-hud {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0 auto 12px;
+    color: #fff;
+}
+
+.challenge-hud.hidden {
+    display: none;
+}
+
+.challenge-stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(36, 36, 36, .7);
+    border: 1px solid rgba(255, 255, 255, .12);
+    font-size: 0.95rem;
+}
+
+.challenge-stat b {
+    color: var(--accent-color);
+    font-size: 1.15rem;
+}
+
 .map-action-button {
     min-height: 36px;
     padding: 6px 13px;
@@ -1289,9 +1351,23 @@ td.col-wzmacnia .badge {
     cursor: not-allowed;
 }
 
+.map-giveup-button {
+    display: block;
+    margin: 10px auto 0;
+    color: #ff8a93;
+}
+
+.map-giveup-button.hidden {
+    display: none;
+}
+
 .map-pool-panel > .map-action-button {
     display: block;
     margin: 10px auto 0;
+}
+
+.map-pool-panel > .map-action-button.hidden {
+    display: none;
 }
 
 .map-stage {

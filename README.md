@@ -1,54 +1,100 @@
 # Polandle
 
-Polandle to statyczna gra przeglądarkowa po polsku, inspirowana Wordle i światem Stendhala. Gracz zgaduje potwory albo przedmioty na podstawie statystyk, a katalogi pozwalają przeglądać i filtrować bazy.
+Polandle to bezpłatna gra przeglądarkowa po polsku, inspirowana popularną grą typu „Wordle" oraz fantastycznym światem gry Stendhal. Codziennie czeka na Ciebie nowa zagadka, a dodatkowe tryby pozwalają ćwiczyć bez końca. Do gry wystarczy przeglądarka — nie trzeba nic instalować ani zakładać konta. Twój postęp i rekordy zapisują się automatycznie na Twoim urządzeniu.
 
-## Uruchamianie
+## O co chodzi w grze?
 
-Projekt nie wymaga bundlera ani instalacji zależności. Najprościej otworzyć `index.html` w przeglądarce. Aby przetestować Service Workera i instalowanie PWA, uruchom lokalny serwer HTTP:
+W każdej z gier Twoim zadaniem jest odgadnięcie ukrytej rzeczy — potwora, przedmiotu albo miejsca na mapie — na podstawie sprytnych podpowiedzi. Im bliżej jesteś rozwiązania, tym więcej wiesz. Każda kolejna próba przybliża Cię do celu, a gra podpowiada, czy strzelasz za wysoko, czy za nisko.
 
-```powershell
-py -m http.server 8000
-```
+## Menu główne
 
-Następnie otwórz `http://localhost:8000/`.
+Po wejściu do gry wybierasz jedną z trzech propozycji:
 
-## Funkcje
+- **Zgadnij Potwora** – odgadnij potwora po jego statystykach.
+- **Zgadnij Przedmiot** – odgadnij przedmiot po jego właściwościach.
+- **Zgadnij Mapkę** – rozpoznaj miejsce z fragmentu mapy.
 
-- codzienna zagadka z tym samym celem dla wszystkich graczy;
-- tryb treningowy z losowym celem;
-- zgadywanie potworów i przedmiotów po statystykach;
-- podpowiedzi, historia ostatnich gier i serie zwycięstw w `localStorage`;
-- Bestiariusz i Księga Przedmiotów z wyszukiwaniem, filtrami i sortowaniem klawiaturą;
-- responsywny interfejs, śnieg, światła nieba i obsługa podstawowych wymagań dostępności;
-- manifest PWA i cache Service Workera dla uruchomienia przez HTTP(S).
+Z każdej gry możesz w dowolnej chwili wrócić do menu albo zajrzeć do Bestiariusza lub Księgi Przedmiotów, by podglądać i filtrować całą kolekcję.
 
-## Struktura
+## Dwa sposoby na grę
 
-```text
-js/
-  modules/       Wspólne helpery, autocomplete, modal, statystyki, powiadomienia i tryb gry
-  game.js        Zgadywanie potworów
-  game_przedmioty.js  Zgadywanie przedmiotów
-  app.js         Bestiariusz
-  app_przedmioty.js   Księga Przedmiotów
-  baza_potworow.js    Dane potworów
-  przedmioty.js       Dane przedmiotów
-tools/
-  validate_data.py    Walidacja wymaganych pól baz danych
-```
+Każda z głównych gier oferuje dwa warianty zabawy:
 
-## Walidacja
+- **Codzienna zagadka** – jednego dnia wszyscy gracze na świecie rozwiązują tę samą zagadkę. Masz tylko jedną szansę na dzień, więc warto się zastanowić! Następnego dnia czeka kolejna.
+- **Tryb treningowy** – chcesz poćwiczyć bez limitu? Losujesz nowe zagadki do woli i grasz tyle razy, ile masz ochotę.
 
-```powershell
-py tools/validate_data.py
-```
+W obu wariantach Twoje wyniki, serie zwycięstw i historia prób zapisują się automatycznie. W każdej chwili możesz też skorzystać z przycisku „Poddaj się", jeśli utkniesz — gra pokaże Ci wtedy rozwiązanie.
 
-Skrypt sprawdza poprawność składni JSON osadzonego w plikach JS, unikalność nazw i wymagane pola baz danych. Dane pozostają w formacie JS, aby zachować kompatybilność z obecnym statycznym ładowaniem; ich normalizacja odbywa się w `js/modules/helpers.js`.
+## Zgadnij Potwora
 
-## Plan rozwoju
+**Cel:** odgadnij ukrytego potwora, wpisując jego imię. Masz do dyspozycji podpowiedzi podczas pisania — wystarczy zacząć wpisywać, a gra sama podpowie pasujące nazwy.
 
-- eksport i import statystyk gracza;
-- wydzielenie baz do JSON ładowanego przez `fetch`;
-- testy porównywania statystyk i renderowania podpowiedzi;
-- osobne grafiki aplikacji dla większej liczby rozmiarów ikon PWA;
-- tryb lokalizacji i kolejne gry.
+**Jak czytać wyniki?** Po każdej próbie zobaczysz kolorowe pola z cechami potwora: klasą, poziomem, atakiem, obroną, żywotnością (HP), rozmiarem, rzadkim dropem oraz typem ataku i obrony.
+
+- **Zielony kolor** oznacza, że ta cecha się zgadza.
+- **Strzałka w górę (↑)** mówi, że szukana wartość jest **wyższa** od Twojej.
+- **Strzałka w dół (↓)** mówi, że szukana wartość jest **niższa** od Twojej.
+- Wartości **bliskie** rozwiązaniu dostają wyróżniony kolor — jesteś gorący!
+
+**Podpowiedzi z czasem:** jeśli potrzebujesz pomocy, odblokujesz je po serii prób:
+
+- **Pierwsza podpowiedź** (po 3 błędach) zdradza klasę potwora, jego doświadczenie i czas odrodzenia.
+- **Druga podpowiedź** (po 6 błędach) to klimatyczny cytat naprowadzający na trop.
+
+**Księga Wiedzy** (przycisk z ikoną) to Twoja ściągawka — znajdziesz w niej listę kategorii potworów, żywiołów ataku i obrony oraz swoje statystyki.
+
+## Zgadnij Przedmiot
+
+**Cel:** odgadnij ukryty przedmiot po jego właściwościach. Podobnie jak w grze o potworach, podczas pisania pojawiają się podpowiedzi z pasującymi nazwami.
+
+**Jak czytać wyniki?** Każda próba pokazuje cechy przedmiotu: typ, rodzaj, minimalny poziom, atak, obronę, wagę, lifesteal oraz to, co przedmiot **wzmacnia** i **osłabia**.
+
+- **Zielony kolor** oznacza trafienie w daną cechę.
+- **Strzałka w górę (↑)** – szukana wartość jest **wyższa** od Twojej.
+- **Strzałka w dół (↓)** – szukana wartość jest **niższa** od Twojej.
+- Żywioły wzmocnień i osłabień mają kolorowe odznaki — zielona oznacza trafienie, czerwona pomyłkę.
+
+**Księga Wiedzy** podpowie Ci, jakie typy i rodzaje przedmiotów występują w grze oraz jakie wartości wzmocnień i osłabień się pojawiają. Znajdziesz tam też swoje statystyki.
+
+## Zgadnij Mapkę
+
+**Cel:** rozpoznaj miejsce na podstawie fragmentu mapy. Na początku widzisz tylko mały okrągły wycinek okryty mgłą — reszta czeka na odkrycie.
+
+**Jak grać?** Wpisujesz nazwę miejsca i zatwierdzasz (przyciskiem „Sprawdź" lub klawiszem Enter).
+
+- **Poprawna odpowiedź** – mgła opada i cała mapa zostaje odsłonięta, a gra pokazuje właściwą nazwę.
+- **Błędna odpowiedź** – nic straconego! Okrąg odkrytego obszaru powiększa się, więc za każdym razem widzisz coraz więcej mapy.
+
+Nie musisz się martwić wielkimi literami ani polskimi znakami — gra i tak zrozumie. Możesz też wpisać tylko fragment nazwy (od 4 znaków) albo samą nazwę pliku mapy.
+
+**Wybór map** – przed grą zaznaczasz, z jakich zbiorów mają być losowane mapki: mapy górne, mapy dolne lub pomieszczenia.
+
+**Dwa tryby zabawy:**
+
+- **Klasyczny** – spokojne zgadywanie bez limitu czasu. Możesz w nieskończoność losować kolejne mapki przyciskiem „Losuj mapkę" i odkrywać je w swoim tempie. Jeśli utkniesz, przycisk „Poddaj się" odsłoni całą mapę i pokaże jej nazwę.
+- **Wyzwanie (60 s)** – masz **60 sekund**, żeby odgadnąć jak najwięcej map! Za każdą poprawną odpowiedź zdobywasz punkt, a od razu pojawia się kolejna mapka. Błędne odpowiedzi nadal odsłaniają fragment mapy. Na górze widzisz odliczanie czasu, liczbę trafień i swój rekord. Gdy czas minie, gra pokazuje wynik — jeśli pobijesz swój rekord, pojawi się specjalna gratulacja! Przyciskiem „Start wyzwania" (potem „Zagraj ponownie") rozpoczniesz kolejną próbę.
+
+## Bestiariusz i Księga Przedmiotów
+
+To Twoje kompendia wiedzy — możesz w nich przeglądać całą kolekcję potworów i przedmiotów, także poza samą grą.
+
+- **Wyszukiwanie** – wpisz nazwę, typ lub inne hasło, a lista od razu się przefiltruje.
+- **Filtry** – zawęź widok według wybranej kategorii (np. klasy, typu ataku, rodzaju przedmiotu).
+- **Sortowanie** – kliknij nagłówek dowolnej kolumny, by uporządkować listę rosnąco lub malejąco (np. według poziomu, siły czy wagi).
+
+Oba katalogi są świetnym miejscem do nauki przed kolejną rozgrywką — im lepiej poznasz potwory i przedmioty, tym łatwiej je odgadniesz.
+
+## Twoje statystyki i postępy
+
+Gra pamięta Twoje osiągnięcia i zapisuje je automatycznie, więc możesz śledzić swoje postępy:
+
+- liczba rozegranych gier, wygranych i przegranych;
+- najlepszy i najgorszy wynik (liczba prób);
+- aktualna seria zwycięstw oraz rekord najdłuższej serii;
+- historia ostatnich rozgrywek.
+
+W trybie wyzwania na mapach dodatkowo zapisywany jest Twój najlepszy wynik — próbuj go pobić!
+
+## Miłej zabawy!
+
+Polandle to gra na chwilę przerwy i na dłuższe posiedzenia. Wracaj codziennie po nową zagadkę, ćwicz w trybie treningowym, ucz się z katalogów i rywalizuj sam ze sobą o kolejne rekordy. Powodzenia, Wędrowcze!
