@@ -1437,6 +1437,10 @@ td.col-wzmacnia .badge {
 }
 
 .map-status {
+    display: block;
+    margin: 12px auto 0;
+    max-width: 430px;
+    text-align: center;
     color: #fff;
     font-weight: bold;
 }
