@@ -1,6 +1,9 @@
 (function () {
     "use strict";
 
+    const shared = window.PolandleModules;
+    const ranking = shared && shared.ranking;
+
     const poolLabels = {
         gorne: "mapy gorne",
         dolne: "mapy dolne",
@@ -72,7 +75,12 @@
     }
 
     function getPool() {
-        return getSelectedPools().flatMap(pool =>
+        // Tryb wyzwania: losujemy ze WSZYSTKICH pul map.
+        // Tryb klasyczny: tylko z zaznaczonych pul.
+        const pools = state.mode === "challenge"
+            ? Object.keys(mapPools)
+            : getSelectedPools();
+        return pools.flatMap(pool =>
             (mapPools[pool] || []).map(map => ({ ...map, pool }))
         );
     }
@@ -128,6 +136,7 @@
         status.textContent = `Koniec czasu! Trafienia: ${state.score}.` +
             (isNewBest ? " To nowy rekord!" : ` Rekord: ${state.best}.`);
         progress.textContent = "Wyzwanie zakonczone. Kliknij „Start wyzwania”, aby zagrac ponownie.";
+        if (ranking) ranking.recordChallenge(state.score);
         if (challengeStartButton) {
             challengeStartButton.textContent = "Zagraj ponownie";
             challengeStartButton.disabled = false;
@@ -140,6 +149,14 @@
         if (challengeStartButton) challengeStartButton.classList.toggle("hidden", !isChallenge);
         if (newMapButton) newMapButton.classList.toggle("hidden", isChallenge);
         if (giveUpButton) giveUpButton.classList.toggle("hidden", isChallenge);
+
+        // W trybie wyzwania losujemy ze wszystkich map – checkboxy pul
+        // są wtedy nieaktywne (dotyczą tylko trybu klasycznego).
+        document.querySelectorAll('input[name="map-pool"]').forEach(checkbox => {
+            checkbox.disabled = isChallenge;
+        });
+        const poolOptions = document.querySelector(".map-pool-options");
+        if (poolOptions) poolOptions.classList.toggle("map-pool-disabled", isChallenge);
     }
 
     function startChallenge() {
@@ -304,5 +321,14 @@
     } else {
         applyMode();
         startRound();
+    }
+
+    if (shared && shared.rankingUI) {
+        shared.rankingUI.mount({
+            category: "mapsChallenge",
+            title: "Ranking — Wyzwanie Map",
+            challenge: true,
+            icon: true
+        });
     }
 })();

@@ -46,6 +46,7 @@
     const recordGame = result => shared.statistics.recordGame("monsters", result);
     const chooseTarget = shared.gameMode.chooseTarget;
     const gameSession = shared.gameSession;
+    const ranking = shared.ranking;
 
     function renderPlayerStats() {
         const stats = loadStats();
@@ -188,6 +189,7 @@
         saveSession();
         // (nie logujemy nazwy potwora — cheat-mode wycięty)[cite: 1]
 
+        if (ranking) ranking.startRound("monsters");
         guessInput.focus();
     }
 
@@ -472,6 +474,7 @@
 
         const tries = state.guessed.length;
         const stats = recordGame({ won: true, tries });
+        if (ranking) ranking.recordWin("monsters", { tries });
         if (shared.gameMode.getMode() === "daily") shared.gameMode.markDailyCompleted("monsters");
         saveSession("win", tries);
 
@@ -530,6 +533,7 @@
         suggestionsBox.innerHTML = "";
 
         const stats = recordGame({ won: false });
+        if (ranking) ranking.recordGiveUp("monsters");
         if (shared.gameMode.getMode() === "daily") {
             shared.gameMode.markDailyCompleted("monsters");
             saveSession("giveup", state.guessed.length);
@@ -620,5 +624,14 @@
         document.addEventListener("DOMContentLoaded", initGame);
     } else {
         initGame();
+    }
+
+    if (shared.rankingUI) {
+        shared.rankingUI.mount({
+            category: "monsters",
+            title: "Ranking — Zgadnij Potwora",
+            icon: true,
+            nextTo: "#btn-stats"
+        });
     }
 })();

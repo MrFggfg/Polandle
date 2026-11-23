@@ -19,6 +19,7 @@ const APP_SHELL = [
     "images/podpowiedz1.png",
     "images/podpowiedz2.png",
     "images/poddajsie.png",
+    "images/ranking.png",
     "js/baza_potworow.js",
     "js/przedmioty.js",
     "js/mapy.js",
@@ -35,7 +36,9 @@ const APP_SHELL = [
     "js/modules/autocomplete.js",
     "js/modules/modal.js",
     "js/modules/game-mode.js",
-    "js/modules/game-session.js"
+    "js/modules/game-session.js",
+    "js/modules/ranking.js",
+    "js/modules/ranking-ui.js"
 ];
 
 self.addEventListener("install", event => {

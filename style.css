@@ -1296,6 +1296,14 @@ td.col-wzmacnia .badge {
     accent-color: var(--accent-color);
 }
 
+.map-pool-disabled {
+    opacity: .45;
+}
+
+.map-pool-disabled .map-pool-option {
+    cursor: not-allowed;
+}
+
 .challenge-hud {
     position: relative;
     z-index: 3;
@@ -1325,6 +1333,126 @@ td.col-wzmacnia .badge {
 .challenge-stat b {
     color: var(--accent-color);
     font-size: 1.15rem;
+}
+
+/* --- RANKING --- */
+.ranking-open-btn {
+    min-height: 34px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, transform .15s;
+}
+
+.ranking-open-btn:hover {
+    background: rgba(255, 70, 85, 0.10);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.ranking-content {
+    text-align: center;
+}
+
+.ranking-block {
+    margin-bottom: 16px;
+}
+
+.ranking-label {
+    margin: 0 0 4px;
+    color: #bbb;
+    font-size: 0.9rem;
+    letter-spacing: .02em;
+}
+
+.ranking-big {
+    margin: 0;
+    font-family: 'Black Chancery', serif;
+    font-size: 2.4rem;
+    color: var(--accent-color);
+    line-height: 1.1;
+}
+
+.ranking-sub {
+    margin: 2px 0 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.ranking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0 auto 18px;
+    max-width: 460px;
+}
+
+.ranking-cell {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    font-size: 0.92rem;
+    color: #ddd;
+}
+
+.ranking-cell b {
+    color: #fff;
+}
+
+.ranking-history {
+    max-width: 460px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.ranking-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    font-size: 0.9rem;
+}
+
+.ranking-row:last-child {
+    border-bottom: none;
+}
+
+.ranking-row-main {
+    color: #eee;
+}
+
+.ranking-row-main b {
+    color: #fff;
+}
+
+.ranking-row-date {
+    color: #999;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.ranking-empty {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 12px 0;
+}
+
+@media (max-width: 560px) {
+    .ranking-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .map-action-button {

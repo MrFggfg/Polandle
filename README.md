@@ -67,12 +67,12 @@ W obu wariantach Twoje wyniki, serie zwycięstw i historia prób zapisują się 
 
 Nie musisz się martwić wielkimi literami ani polskimi znakami — gra i tak zrozumie. Możesz też wpisać tylko fragment nazwy (od 4 znaków) albo samą nazwę pliku mapy.
 
-**Wybór map** – przed grą zaznaczasz, z jakich zbiorów mają być losowane mapki: mapy górne, mapy dolne lub pomieszczenia.
+**Wybór map** – przed grą zaznaczasz, z jakich zbiorów mają być losowane mapki: mapy górne, mapy dolne lub pomieszczenia. Dotyczy to **trybu klasycznego** — w trybie wyzwania mapy losowane są ze wszystkich zbiorów.
 
 **Dwa tryby zabawy:**
 
-- **Klasyczny** – spokojne zgadywanie bez limitu czasu. Możesz w nieskończoność losować kolejne mapki przyciskiem „Losuj mapkę" i odkrywać je w swoim tempie. Jeśli utkniesz, przycisk „Poddaj się" odsłoni całą mapę i pokaże jej nazwę.
-- **Wyzwanie (60 s)** – masz **60 sekund**, żeby odgadnąć jak najwięcej map! Za każdą poprawną odpowiedź zdobywasz punkt, a od razu pojawia się kolejna mapka. Błędne odpowiedzi nadal odsłaniają fragment mapy. Na górze widzisz odliczanie czasu, liczbę trafień i swój rekord. Gdy czas minie, gra pokazuje wynik — jeśli pobijesz swój rekord, pojawi się specjalna gratulacja! Przyciskiem „Start wyzwania" (potem „Zagraj ponownie") rozpoczniesz kolejną próbę.
+- **Klasyczny** – spokojne zgadywanie bez limitu czasu. Mapy losowane są z zaznaczonych zbiorów. Możesz w nieskończoność losować kolejne mapki przyciskiem „Losuj mapkę" i odkrywać je w swoim tempie. Jeśli utkniesz, przycisk „Poddaj się" odsłoni całą mapę i pokaże jej nazwę.
+- **Wyzwanie (60 s)** – masz **60 sekund**, żeby odgadnąć jak najwięcej map! Mapy losowane są **ze wszystkich zbiorów** (zaznaczenia nie mają tu znaczenia). Za każdą poprawną odpowiedź zdobywasz punkt, a od razu pojawia się kolejna mapka. Błędne odpowiedzi nadal odsłaniają fragment mapy. Na górze widzisz odliczanie czasu, liczbę trafień i swój rekord. Gdy czas minie, gra pokazuje wynik — jeśli pobijesz swój rekord, pojawi się specjalna gratulacja! Przyciskiem „Start wyzwania" (potem „Zagraj ponownie") rozpoczniesz kolejną próbę.
 
 ## Bestiariusz i Księga Przedmiotów
 
@@ -92,6 +92,13 @@ Gra pamięta Twoje osiągnięcia i zapisuje je automatycznie, więc możesz śle
 - najlepszy i najgorszy wynik (liczba prób);
 - aktualna seria zwycięstw oraz rekord najdłuższej serii;
 - historia ostatnich rozgrywek.
+
+## Ranking
+
+W każdej grze znajdziesz przycisk **🏆 Ranking**, który otwiera okno z Twoimi rekordami zapisanymi na tym urządzeniu (ranking jest lokalny — nie wymaga konta ani internetu).
+
+- **Zgadnij Potwora i Zgadnij Przedmiot** – ranking pokazuje najszybsze dzisiejsze odgadnięcie, łączną liczbę trafień, najlepszy czas, serię dni z rzędu oraz historię ostatnich trafień z datami.
+- **Zgadnij Mapkę (Wyzwanie 60 s)** – ranking pokazuje najlepszy wynik (maksymalna liczba trafień w 60 sekund), liczbę rozegranych wyzwań, serię dni oraz pełną historię wyników z datami.
 
 W trybie wyzwania na mapach dodatkowo zapisywany jest Twój najlepszy wynik — próbuj go pobić!
 

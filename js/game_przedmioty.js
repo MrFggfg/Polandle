@@ -45,6 +45,7 @@
     const loadStats = () => shared.statistics.loadStats("items");
     const recordGame = result => shared.statistics.recordGame("items", result);
     const gameSession = shared.gameSession;
+    const ranking = shared.ranking;
 
     function renderPlayerStats() {
         const stats = loadStats();
@@ -175,6 +176,7 @@
         }
         saveSession();
 
+        if (ranking) ranking.startRound("items");
         if (guessInput) guessInput.focus();
     }
 
@@ -499,6 +501,7 @@
 
         const tries = state.guessed.length;
         const stats = recordGame({ won: true, tries });
+        if (ranking) ranking.recordWin("items", { tries });
         if (shared.gameMode.getMode() === "daily") shared.gameMode.markDailyCompleted("items");
         saveSession("win", tries);
 
@@ -516,6 +519,7 @@
             if (suggestionsBox) suggestionsBox.innerHTML = "";
 
             const stats = recordGame({ won: false });
+            if (ranking) ranking.recordGiveUp("items");
 
             const targetName = state.target.nazwa || state.target.name;
 
@@ -613,5 +617,14 @@
         document.addEventListener("DOMContentLoaded", initGame);
     } else {
         initGame();
+    }
+
+    if (shared.rankingUI) {
+        shared.rankingUI.mount({
+            category: "items",
+            title: "Ranking — Zgadnij Przedmiot",
+            icon: true,
+            nextTo: "#open-stats"
+        });
     }
 })();
