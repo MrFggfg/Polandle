@@ -239,7 +239,6 @@
         const fileAnswer = normalize(state.target.file.replace(/\.png$/i, ""));
         if (guess === answer || guess === fileAnswer || answer.includes(guess) && guess.length >= 4) {
             const solvedName = state.target.name;
-            const solvedPool = state.target.pool;
 
             if (state.mode === "challenge") {
                 state.score += 1;
@@ -254,14 +253,9 @@
                 return;
             }
 
-            state.gameOver = true;
-            input.disabled = true;
-            submitButton.disabled = true;
-            image.style.clipPath = `circle(150% at ${state.revealX}% ${state.revealY}%)`;
-            image.style.webkitClipPath = `circle(150% at ${state.revealX}% ${state.revealY}%)`;
-            image.alt = `Mapa: ${solvedName}`;
-            status.textContent = `Dobrze! To mapa: ${solvedName}.`;
-            progress.textContent = `Pula: ${poolLabels[solvedPool]} | Bledne odpowiedzi: ${state.wrongAnswers}`;
+            // Tryb klasyczny: po trafieniu od razu losujemy kolejna mape.
+            startRound();
+            status.textContent = `Dobrze! To mapa: ${solvedName}. Losuje kolejna...`;
             return;
         }
 
@@ -303,6 +297,15 @@
     submitButton.addEventListener("click", submitGuess);
     input.addEventListener("keydown", event => {
         if (event.key === "Enter") submitGuess();
+    });
+
+    // Tryb klasyczny: po zakonczeniu rundy (trafienie/poddanie) nacisnij
+    // Enter, aby wylosowac kolejna mape.
+    document.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        if (state.mode !== "classic" || !state.gameOver) return;
+        event.preventDefault();
+        startRound();
     });
     image.addEventListener("error", () => {
         image.classList.remove("map-image-loading", "map-image-resetting");
